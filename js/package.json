@@ -1,0 +1,15 @@
+{
+  "name": "node-practice",
+  "version": "1.0.0",
+  "description": "node.js practice problems",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "upgradingdave",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^2.3.4"
+  }
+}
