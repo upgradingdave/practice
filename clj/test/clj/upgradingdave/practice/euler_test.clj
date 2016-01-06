@@ -12,9 +12,3 @@
 
 (expect 29  (problem3 13195))
 ;;(expect nil (problem3 600851475143))
-
-
-
-
-
-

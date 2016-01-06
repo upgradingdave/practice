@@ -21,6 +21,19 @@
   will be: 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ... By considering the
   terms in the Fibonacci sequence whose values do not exceed four
   million, find the sum of the even-valued terms."
-  )
+  (let ((x 1)
+        (f 1)
+        (r 0))
+    (while (< f maximum)
+      (if (= (mod f 2) 0)
+          (setq r (+ r f)))
+      (setq f2 f)
+      (setq f (+ x f))
+      (setq x f2))
+    r))
 
 
+(ert-deftest problem2-test ()
+  "Project Euler Problem 2"
+  (should (equal 10 (problem2 10)))
+  (should (equal 4613732 (problem2 4000000))))
