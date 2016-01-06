@@ -2,3 +2,6 @@
 /cljs/upgradingdave/resources/public/js/compiled/devcards_out
 /cljs/upgradingdave/target
 /cljs/upgradingdave/figwheel_server.log
+/cljs/upgradingdave/.lein-repl-history
+/cljs/upgradingdave/.nrepl-port
+/cljs/upgradingdave/resources/public/js/core.cljs.cache.aot.json

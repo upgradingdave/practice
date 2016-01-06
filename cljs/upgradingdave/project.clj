@@ -5,10 +5,12 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.170"]
+                 [org.clojure/clojurescript "1.7.219"]
                  [devcards "0.2.1"]
                  [sablono "0.4.0"]
                  [org.clojure/test.check "0.9.0"]
+                 [org.clojure/tools.reader "0.10.0-SNAPSHOT"]
+                 [com.cognitect/transit-clj "0.8.285"]
                  #_[org.omcljs/om "0.9.0"]
                  #_[reagent "0.5.1"]]
 
