@@ -12,3 +12,18 @@
 
 (expect 29  (problem3 13195))
 ;;(expect nil (problem3 600851475143))
+
+(expect true (palindrome? 999))
+(expect nil? (palindrome? 990))
+(expect true (palindrome? 1001))
+(expect true (palindrome? 1000000001))
+(expect nil? (palindrome? 1000001001))
+(expect nil? (palindrome? 100011001))
+(expect true (palindrome? 1000110001))
+(expect true (palindrome? 11))
+(expect nil? (palindrome? 12))
+(expect true (palindrome? 1))
+(expect true (palindrome? 4))
+
+(expect 9009   (problem4 2))
+(expect 906609 (problem4 3))

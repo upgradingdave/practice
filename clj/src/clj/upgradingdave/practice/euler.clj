@@ -105,3 +105,27 @@
         (recur (/ x p) 2)
         (recur x (inc p))))))
 
+
+(defn palindrome?
+  "Return true if number is a palindromic number (reads the same both ways)"
+  [^Integer n]
+  (let [s (str n)]
+    (if (not (empty? s))
+      (loop [s s]
+        (if (= (count s) 1)
+          true
+          (if (and (= (count s) 2) (= (first s) (last s)))
+            true
+            (if (= (first s) (last s))
+              (recur (.substring s 1 (dec (count s)))))))))))
+
+(defn problem4
+  "Find the largest palindrome made from the product of two 3-digit numbers"
+  [digits]
+  (let [largest (Integer/parseInt (apply str (take digits (repeat 9))))]
+    (apply max
+     (filter #(not (nil? %))
+             (for [x (range largest 1 -1) y (range largest 1 -1)]
+               (let [r (* x y)]
+                 (if (palindrome? r)
+                   r)))))))
