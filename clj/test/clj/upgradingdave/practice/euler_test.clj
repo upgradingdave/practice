@@ -27,3 +27,11 @@
 
 (expect 9009   (problem4 2))
 (expect 906609 (problem4 3))
+
+(expect 385      (sum-of-squares 10))
+(expect 3025     (square-of-sum  10))
+(expect 2640     (problem6       10))
+(expect 25164150 (problem6       100))
+
+;; Takes a couple mins
+;; (expect 104743 (problem7 10001))
