@@ -14,3 +14,22 @@ describe('euler problem 2', function() {
     assert.equal(4613732, euler.problem2(4000000));
   });
 });
+
+describe('euler problem 3', function() {
+  it('should find the largest prime factor of n', function () {
+    assert.equal(29,   euler.problem3(13195));
+    assert.equal(6857, euler.problem3(600851475143));
+  });
+});
+
+// in progress
+// describe('euler problem 4', function() {
+//   it('should find palindromes', function() {
+//     assert.equal(true,   euler.isPalindrome(9009));
+//   });
+
+  // it('should find the largest palindrome of an n digit number', function () {
+  //   assert.equal(9009,   euler.problem4(2));
+  //   assert.equal(906609, euler.problem4(3));
+  // });
+// });

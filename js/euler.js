@@ -1,3 +1,4 @@
+
 module.exports = {
 
   /**
@@ -31,6 +32,66 @@ module.exports = {
 
     }
     return result;
+  },
+
+  /**
+   * Sum fibonacci numbers
+   */
+  problem3: function(n) {
+    var p = 2;
+    var x = n;
+
+    while(x !== p) {
+      if(x % p == 0) {
+        x = x / p;
+        p = 2;
+      } else {
+        p = p + 1;
+      }
+    }
+    return x;
+  },
+
+  isPalindrome: function(n){
+    if(!isNaN(n))
+      return false;
+
+    var s = n.toString();
+    var j = s.length-1;
+
+    console.log("Hi there");
+
+    for(var i=0; i<=j; i++) {
+      console.log(s[i] + "?=" + s[j]);
+      if(s[i] != s[j]) {
+        return false;
+      }
+      j = j-1;
+    }
+
+    return true;
+  },
+
+  /*
+   * A palindromic number reads the same both ways. The largest
+   * palindrome made from the product of two 2-digit numbers is 9009 =
+   * 91 × 99.
+   *
+   * Find the largest palindrome made from the product of two 3-digit
+   *  numbers. 
+   */
+  problem4: function(n) {
+    var s = "";
+    for(var i=0; i<n; i++)
+      s += "9";
+
+    for(var i=parseInt(s); i>0; i--) {
+      for(var j=parseInt(s); j>0; j--) {
+        
+      }
+    }
+
+    return s;
   }
 
 };
