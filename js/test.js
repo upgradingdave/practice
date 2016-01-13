@@ -36,3 +36,10 @@ describe('euler problem 4', function() {
     assert.equal(906609,  euler.problem4(3));
   });
 });
+
+describe('euler problem 5', function() {
+  it('should find smallest evenly divisible numbers', function () {
+    assert.equal(2520, euler.problem5(10));
+    assert.equal(232792560, euler.problem5(20));
+  });
+});

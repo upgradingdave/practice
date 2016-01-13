@@ -92,6 +92,28 @@ module.exports = {
     }
 
     return biggest;
+  },
+
+  /*
+   * 2520 is the smallest number that can be divided by each of the
+   * numbers from 1 to 10 without any remainder.
+
+   * What is the smallest positive number that is evenly divisible by all
+   * of the numbers from 1 to 20?
+   */
+  problem5: function(max) {
+    var i = 0;
+    var found = false;
+    while(!found) {
+      i += max;
+      var divides = true;
+      for(var j=1; j <= max && divides ; j++) {
+        if(i % j != 0) {
+          divides = false;
+        }
+      }
+      if(divides) return i;
+    }
   }
 
 };
