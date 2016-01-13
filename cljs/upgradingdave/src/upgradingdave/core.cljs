@@ -2,6 +2,7 @@
   (:require
    #_[om.core :as om :include-macros true]
    [sablono.core :as sab :include-macros true]
+   [upgradingdave.bmr-dev    :as bmr]
    [upgradingdave.generators :as gen]
    [upgradingdave.compiler   :as compile])
   (:require-macros

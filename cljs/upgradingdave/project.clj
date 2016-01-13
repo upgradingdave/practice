@@ -7,12 +7,10 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.219"]
                  [devcards "0.2.1"]
-                 [sablono "0.4.0"]
                  [org.clojure/test.check "0.9.0"]
                  [org.clojure/tools.reader "0.10.0-SNAPSHOT"]
                  [com.cognitect/transit-clj "0.8.285"]
-                 #_[org.omcljs/om "0.9.0"]
-                 #_[reagent "0.5.1"]]
+                 [reagent "0.5.1"]]
 
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-figwheel "0.5.0-1"]]
@@ -38,6 +36,23 @@
                                    :devcards true
                                    :asset-path "js/compiled/out"
                                    :output-to  "resources/public/js/compiled/generators.js"
-                                   :optimizations :advanced}}]}
+                                   :optimizations :advanced}}
+
+                       {:id "prod-bmr"
+                        :source-paths ["src"]
+                        :compiler {:main       "upgradingdave.bmr"
+                                   :devcards   true
+                                   :asset-path "js/compiled/out"
+                                   :output-to  "resources/public/js/compiled/bmr.js"
+                                   :optimizations :advanced}}
+                       
+                       {:id "prod-bmr-devcards"
+                        :source-paths ["src"]
+                        :compiler {:main       "upgradingdave.bmr-dev"
+                                   :devcards   true
+                                   :asset-path "js/compiled/out"
+                                   :output-to  "resources/public/js/compiled/bmr-dev.js"
+                                   :optimizations :advanced}}
+]}
 
   :figwheel { :css-dirs ["resources/public/css"] })
