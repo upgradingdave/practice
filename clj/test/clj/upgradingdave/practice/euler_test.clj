@@ -10,8 +10,8 @@
 
 (expect [5 7 13 29] (prime-factors 13195))
 
-(expect 29  (problem3 13195))
-;;(expect nil (problem3 600851475143))
+(expect 29   (problem3 13195))
+(expect 6857 (problem3 600851475143))
 
 (expect true (palindrome? 999))
 (expect nil? (palindrome? 990))
@@ -35,3 +35,7 @@
 
 ;; Takes a couple mins
 ;; (expect 104743 (problem7 10001))
+
+(expect 5832        (problem8 4))
+(expect 23514624000 (problem8 13))
+
