@@ -53,16 +53,13 @@ module.exports = {
   },
 
   isPalindrome: function(n){
-    if(!isNaN(n))
+    if(isNaN(n))
       return false;
 
     var s = n.toString();
     var j = s.length-1;
 
-    console.log("Hi there");
-
     for(var i=0; i<=j; i++) {
-      console.log(s[i] + "?=" + s[j]);
       if(s[i] != s[j]) {
         return false;
       }
@@ -85,13 +82,16 @@ module.exports = {
     for(var i=0; i<n; i++)
       s += "9";
 
+    var biggest = 0;
     for(var i=parseInt(s); i>0; i--) {
       for(var j=parseInt(s); j>0; j--) {
-        
+        var guess = i*j
+        if(this.isPalindrome(guess) && guess > biggest)
+          biggest = guess;
       }
     }
 
-    return s;
+    return biggest;
   }
 
 };

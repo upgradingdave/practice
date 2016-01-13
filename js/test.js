@@ -22,14 +22,17 @@ describe('euler problem 3', function() {
   });
 });
 
-// in progress
-// describe('euler problem 4', function() {
-//   it('should find palindromes', function() {
-//     assert.equal(true,   euler.isPalindrome(9009));
-//   });
+describe('euler problem 4', function() {
+  it('should find palindromes', function() {
+    assert.equal(true,  euler.isPalindrome(9009));
+    assert.equal(true,  euler.isPalindrome(99));
+    assert.equal(true,  euler.isPalindrome(90909));
+    assert.equal(false, euler.isPalindrome(90019));
+    assert.equal(true,  euler.isPalindrome(906609));
+  });
 
-  // it('should find the largest palindrome of an n digit number', function () {
-  //   assert.equal(9009,   euler.problem4(2));
-  //   assert.equal(906609, euler.problem4(3));
-  // });
-// });
+  it('should find the largest palindrome of an n digit number', function () {
+    assert.equal(9009,   euler.problem4(2));
+    assert.equal(906609,  euler.problem4(3));
+  });
+});
