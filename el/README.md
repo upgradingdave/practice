@@ -1,5 +1,9 @@
 # Overview
 
+From the `practice` directory:
+
+`make elisp`
+
 To run tests from the command line use:
 
 ```
@@ -13,4 +17,3 @@ For convenience, use the make command from the root `practice` directory.
 Open the `euler.el` buffer, and then run `M-x ert RET t RET` to run
 unit tests
 
-TODO: it'd be cool to run as emacs batch 

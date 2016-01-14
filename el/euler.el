@@ -37,3 +37,19 @@
   "Project Euler Problem 2"
   (should (equal 10 (problem2 10)))
   (should (equal 4613732 (problem2 4000000))))
+
+(defun problem3 (n)
+  "The prime factors of 13195 are 5, 7, 13 and 29.
+   What is the largest prime factor of the number 600851475143 ?"
+  (let ((x n)
+        (p 2))
+    (while (> x p)
+      (if (= (mod x p) 0)
+          (setq x (/ x p))
+        (setq p (+ p 1))))
+    x))
+
+(ert-deftest problem3-test ()
+  "Project Euler Problem 3"
+  (should (equal 29   (problem3 13195)))
+  (should (equal 6857 (problem3 600851475143))))
