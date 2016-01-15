@@ -201,3 +201,22 @@
         (if (> product largest)
           (recur xs product)
           (recur xs largest))))))
+
+(defn is-square [n]
+  (let [sqrt (Math/sqrt n)
+        result (re-matches #"\d+\.0$" (str sqrt))]
+    (if result (int sqrt))))
+
+(defn pythagorean-triplets 
+  "list of pythagorean triplets"
+  [n]
+  (filter identity
+          (for [x (range 1 n) y (range 1 n)] 
+            (if (> x y)
+              (if-let [z (is-square (+ (* x x) (* y y)))]
+                [x y z])))))
+
+(defn problem9 [n]
+  (apply * (first
+            (filter (fn [[x y z]] (= (+ x y z) n)) 
+                    (pythagorean-triplets n)))))

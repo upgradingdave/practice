@@ -1,12 +1,18 @@
 elisp: el/euler.el
 	emacs -batch -l ert -l el/euler.el -f ert-run-tests-batch-and-exit
 
-# CLJ
+# Haskell (wip, need to figure out how to write tests)
+hs: cabal-sandbox
+	cabal-install
+
+cabal-sandbox: hs/.cabal-sandbox
+	cabal sandbox init
+
 clj: FORCE
 	cd clj; echo "starting clj environment ... "; \
 		boot dev
 
-# CLJS Builds
+# cljs Builds
 bmr: export BLOG_HOME=/Users/dparoulek/code/upgradingdave
 bmr: export CLJS_HOME=/Users/dparoulek/code/practice/cljs/upgradingdave
 bmr: compile-bmr

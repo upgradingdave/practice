@@ -39,3 +39,12 @@
 (expect 5832        (problem8 4))
 (expect 23514624000 (problem8 13))
 
+(expect nil? (is-square 5))
+(expect 2    (is-square 4))
+
+(expect 60       (problem9 12))
+(expect 31875000 (problem9 1000))
+
+
+
+
