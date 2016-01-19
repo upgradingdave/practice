@@ -1,6 +1,18 @@
 (ns upgradingdave.bmr
   (:require [reagent.core :as r]))
 
+;; map helpers
+
+(defn assoc-all 
+  "Update all nested fields with the same value. For example, say you
+  need to update all :active keys to false:
+  
+  (assoc-all {:one {:active true}
+              :two {:active true}}
+             #(assoc-in % [:active] false))"
+  [m f]
+  (into {} (for [[k v] m] [k (f v)])))
+
 (defn kg->lb [kg]
   (* kg 2.20462))
 
@@ -21,6 +33,24 @@
     (if (= gender "f")
       (- bmr 161)
       (+ bmr 5))))
+
+(def exercise-levels 
+  {:sedentary {:multiplier 1.2
+               :desc "Little or no exercise"}
+   :light     {:multiplier 1.375
+               :desc "Light exercise (1-3 days/week)"}
+   :moderate  {:multiplier 1.55
+               :desc "Moderate exercise (3-5 days/week)"}
+   :active    {:multiplier 1.725
+               :desc "Hard exercise (6-7 days/week)"}
+   :heavy     {:multiplier 1.9
+               :desc "Very hard exercise & physical job or 2x training"}
+   })
+
+(defn harris-benedict
+  "Calculate total daily calorie needs"
+  [multiplier bmr]
+  (* multiplier bmr))
 
 (defn gender-select [data]
   [:div {:class "form-group"}
@@ -103,6 +133,35 @@
    [:div {:class "col-sm-2"} (feet-select data)]
    [:div {:class "col-sm-2"} (inch-select data)]])
 
+(defn reset-level-radios
+  "Reset all checkboxes to false"
+  [m key]
+  (swap! m update-in [:exercise] assoc-all #(assoc-in % [:checked] false)))
+
+(defn exercise-radio [data k]
+  (let [{:keys [multiplier desc checked]} (get-in @data [:exercise k])]
+    [:div {:class "radio"}
+     [:label
+      [:input {:type "radio" 
+               :name "exerciseRadios" 
+               :id "exerciseLight"
+               :value multiplier
+               :checked checked
+               :on-change 
+               #(let [v (-> % .-target .-value)]
+                  ;; (reset-level-radios data [:exercise])
+                  ;;(swap! data assoc-in [:exercise k :checked] true)
+                  (swap! data update-in [:exercise] 
+                         (fn [o] 
+                           (-> o
+                               (assoc-all (fn [o] 
+                                            (assoc-in o [:checked] false)))
+                               (assoc-in  [k :checked] true)
+                               )))
+
+                  (swap! data assoc-in [:level] (js/parseFloat v)))}]
+      desc]]))
+
 (defn bmr-calculator [data]
   [:form {:class "form-horizontal"}
 
@@ -118,13 +177,26 @@
     [:div {:class "col-sm-offset-1 col-sm-11 alert alert-success" 
            :id "bmr-result"} (str "Your BMR: " (calc-bmr @data))]]])
 
+(defn energy-calculator [data]
+  [:div
+   (for [k (keys (:exercise @data))]
+     ^{:key k}[exercise-radio data k])
+    [:div {:class "alert alert-success" 
+           :id "bmr-result"} 
+     (str "Est. Calories Burned Per Day : " 
+          (harris-benedict (get-in   @data [:level]) 
+                           (calc-bmr @data)))]])
+
 (def data (r/atom {:gender "m"
                    :weight {:value 220 :unit "lbs"} 
                    :height {:ft 6 :in 2 :cm (to-cm 6 2)}
-                   :age 36}))
+                   :age 36
+                   :exercise exercise-levels}))
 
 (defn main []
   (if-let [node (.getElementById js/document "bmr-calc")]
-    (r/render-component [bmr-calculator data] node)))
+    (r/render-component [energy-calculator data] node)))
 
 (main)
+
+

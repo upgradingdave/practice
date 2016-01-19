@@ -30,12 +30,20 @@
                                     :output-dir "resources/public/js/compiled/devcards_out"
                                     :source-map-timestamp true }}
 
-                       {:id "prod-generators"
+                       {:id "prod-pwd"
                         :source-paths ["src"]
                         :compiler {:main       "upgradingdave.generators"
-                                   :devcards true
+                                   :devcards   true
                                    :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/generators.js"
+                                   :output-to  "resources/public/js/compiled/pwd.js"
+                                   :optimizations :advanced}}
+
+                       {:id "prod-pwd-devcards"
+                        :source-paths ["src"]
+                        :compiler {:main       "upgradingdave.generators-dev"
+                                   :devcards   true
+                                   :asset-path "js/compiled/out"
+                                   :output-to  "resources/public/js/compiled/pwd-dev.js"
                                    :optimizations :advanced}}
 
                        {:id "prod-bmr"

@@ -1,7 +1,6 @@
 (ns upgradingdave.bmr-dev
   (:require
    [devcards.core     :as dc]
-   [sablono.core      :as sab :include-macros true]
    [reagent.core      :as r]
    [upgradingdave.bmr :as bmr])
   (:require-macros
@@ -134,6 +133,45 @@
            :weight {:value 220 :unit "lbs"} 
            :height {:ft 6 :in 2 :cm (bmr/to-cm 6 2)}
            :age 36
+           })
+  {:inspect-data true})
+
+(defcard-doc 
+  "### Calories burned by Exercise
+  
+   In addition to BMR, let's also calculate amount of calories
+   burned based on estimated level of exercise. [The Harris-Benedict](https://en.wikipedia.org/wiki/Harris–Benedict_equation) equation takes the BMR and gives a multiplier based on estimated amount of weekly exercise. Here are the multiplier values for the different levels of exercise:"
+
+  (dc/mkdn-pprint-source bmr/exercise-levels)
+
+  "And here's the function to calculate the total calories burned"
+
+  (dc/mkdn-pprint-source bmr/harris-benedict)
+
+  "Let's use radio buttons this time. Here's the code for the radio
+   button widget"
+
+  (dc/mkdn-pprint-source bmr/exercise-radio)
+  (dc/mkdn-pprint-source bmr/energy-calculator)
+  
+  )
+
+(deftest harris-benedict
+  (testing "testing cm"
+    (is (= 2397.1848 (bmr/harris-benedict 1.2 1997.654)))))
+
+(defcard
+  "### Total Energy"
+  (dc/reagent 
+   (fn [data _] 
+     [:div
+      [bmr/bmr-calculator    data]
+      [bmr/energy-calculator data]]))
+  (r/atom {:gender "m"
+           :weight {:value 220 :unit "lbs"} 
+           :height {:ft 6 :in 2 :cm (bmr/to-cm 6 2)}
+           :age 36
+           :exercise bmr/exercise-levels
            })
   {:inspect-data true})
 
