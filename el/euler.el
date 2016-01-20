@@ -53,3 +53,49 @@
   "Project Euler Problem 3"
   (should (equal 29   (problem3 13195)))
   (should (equal 6857 (problem3 600851475143))))
+
+(defun is-palindrome (n)
+  (let* ((s (number-to-string n))
+         (l (string-width s))
+         (x 0)
+         (y (- l 1))
+         (r t))
+    (while (and r (>= y x))
+      (if (= (aref s y) (aref s x))
+          (progn
+            (setq y (- y 1))
+            (setq x (+ x 1)))
+        (setq r nil)))
+    r))
+
+(ert-deftest is-palindrome-test ()
+  "Project Euler Problem 4"
+  (should (is-palindrome 9009))
+  (should (is-palindrome 0))
+  (should (is-palindrome 906609))
+  (should (null (is-palindrome 91009))))
+
+(defun problem4 (n)
+  "A palindromic number reads the same both ways. The largest
+  palindrome made from the product of two 2-digit numbers is 9009
+  = 91 × 99.
+
+  Find the largest palindrome made from the product of two
+  3-digit numbers."
+  (let* ((n (string-to-int (make-string n ?9)))
+         (x n)
+         (y n)
+         (r 0))
+    (while (> x 0)
+      (while (> y 0)
+        (if (and (> (* x y) r) (is-palindrome (* x y)))
+            (setq r (* x y)))
+        (setq y (- y 1)))
+      (setq x (- x 1))
+      (setq y x))
+    r))
+
+(ert-deftest problem4-test ()
+  "Project Euler Problem 4"
+  (should (equal 9009   (problem4 2)))
+  (should (equal 906609 (problem4 3))))
