@@ -51,8 +51,11 @@
   [start]
   (map #(+ start %) (range)))
 
-(defn eratosthenes
-  "sieve of erotosthenes"
+(defn eratosthenes-infinite
+  "Sieve of erotosthenes that produces infinite list. this is pretty
+  slow because it's not possible to make eliminations further out than
+  the current largest prime. So we end up recalculating the
+  eliminations which grows linearly with the size of largest prime."
   ([] (eratosthenes [2] [(not-divisible-fn 2)]))
   ([primes filters] 
    (let [next       (last primes)
@@ -64,10 +67,54 @@
      (lazy-seq (cons next
                      (eratosthenes (conj primes next-prime) filters))))))
 
+;; Before using transients:
+;; "Elapsed time: 17823.110712 msecs"
+;; After using transients: 
+;; "Elapsed time: 7625.619143 msecs"
+(defn- sieve 
+  "acc should be a vector of booleans with index starting at 2 and
+  ending at n. i is the most recently found prime. The result is a
+  vector of booleans with multiples of i marked as false"
+  [n i acc]
+  (loop [j (Math/round (Math/pow (bigint i) 2)) k 0 acc (transient acc)]
+    (if (> j n)
+      (persistent! acc)
+      (recur (+ (Math/round (Math/pow (bigint i) 2)) (* (inc k) i)) (inc k)
+             (assoc! acc (- j 2) false)))))
+
+(defn eratosthenes
+  "Sieve of erotosthenes. Find all primes less than n"
+  [n] 
+  (loop [i 2 acc (into [] (range 2 n))]
+    (if (> i (Math/sqrt n))
+      acc
+      (recur (inc i) (sieve n i acc)))))
+
 (defn primes 
-  "Infinite sequence of prime numbers"
-  [] 
-  (eratosthenes))
+  "infinite version is slow"
+  []  (eratosthenes-infinite)
+  [n] (erotosthenes n))
+
+;; lucas numbers 
+;; If a number fails the lucas test, it's definitely NOT prime
+;; start with 1 and 3
+;; 1, 3, 4, 7, 11, 18, etc
+;; is 5 prime?
+;; find the 5th lucas number = 11
+;; subtract one = 10
+;; if 5 is a factor of 10 then it's probably prime
+
+;; is 6 prime? 
+;; find the 6th lucas number = 18
+;; subtract 1 = 17
+;; if 6 is not a factor of 17 therefore, it's definitely NOT prime
+
+;; Lucas-Lehmer Numbers
+;; start with 4
+;; square the previous number and subtract 2
+;; 4, 14, 194, 37634, etc
+;; Unfortunately, lucas lehmer numbers can only find primes of the
+;; form 2^n - 1 (like 7)
 
 (defn factors 
   "find all factors of n"
@@ -87,7 +134,7 @@
     (filter #(some #{%} ps) fs)))
 
 (defn prime? [n]
-  (loop [x n]
+  (loop [x (Math/round (Math/sqrt 4))]
     (if (<= x 1)
       true
       (if (and (not (= x n))
@@ -220,3 +267,8 @@
   (apply * (first
             (filter (fn [[x y z]] (= (+ x y z) n)) 
                     (pythagorean-triplets n)))))
+
+(defn problem10 
+  "Find sum of all primes below n"
+  [n]
+  (apply + (take-while #(< % n) (primes))))

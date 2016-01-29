@@ -45,6 +45,8 @@
 (expect 60       (problem9 12))
 (expect 31875000 (problem9 1000))
 
+(expect 17 (problem10 10))
+;;(expect 17 (problem10 2000000))
 
 
 
