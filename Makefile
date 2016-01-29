@@ -43,4 +43,10 @@ pwd-compile:
 	cd cljs/upgradingdave; echo "compiling pwd-dev.js ... "; \
 		lein cljsbuild once prod-pwd-devcards
 
+pcf: 
+	cd cljs/upgradingdave; echo "compiling pcf.js ... "; \
+		lein cljsbuild once prod-pcf
+	cd cljs/upgradingdave; echo "compiling pcf-dev.js ... "; \
+		lein cljsbuild once prod-pcf-devcards
+
 FORCE:

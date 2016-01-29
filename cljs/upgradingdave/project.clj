@@ -61,6 +61,22 @@
                                    :asset-path "js/compiled/out"
                                    :output-to  "resources/public/js/compiled/bmr-dev.js"
                                    :optimizations :advanced}}
+
+                       {:id "prod-pcf"
+                        :source-paths ["src"]
+                        :compiler {:main       "upgradingdave.pcf"
+                                   :devcards   true
+                                   :asset-path "js/compiled/out"
+                                   :output-to  "resources/public/js/compiled/pcf.js"
+                                   :optimizations :advanced}}
+
+                       {:id "prod-pcf-devcards"
+                        :source-paths ["src"]
+                        :compiler {:main       "upgradingdave.pcf-dev"
+                                   :devcards   true
+                                   :asset-path "js/compiled/out"
+                                   :output-to  "resources/public/js/compiled/pcf-dev.js"
+                                   :optimizations :advanced}}
 ]}
 
   :figwheel { :css-dirs ["resources/public/css"] })
