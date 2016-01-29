@@ -8,3 +8,7 @@
 /clj/.nrepl-port
 /cljs/upgradingdave/resources/public/js/compiled/
 /hs/.cabal-sandbox/
+/.cabal-sandbox
+/hs/dist
+/hs/cabal.sandbox.config
+/cabal.sandbox.config
