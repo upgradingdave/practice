@@ -35,6 +35,55 @@ problem3 n = problem3' n 2
               | otherwise = problem3' n (i+1)
 -- Test: problem3 600851475143 == 6857
 
+largestDigit :: Num a => Int -> a
+largestDigit 1 = 9
+largestDigit y = (largestDigit (y-1)) + x
+    where x = (9 * (foldl (*) 1 (take (y-1) (repeat 10))))
+
+-- How to reverse digits of a number
+-- r= r * 10 + n mod 10
+-- n= n/10
+
+-- n=123
+-- r=0
+
+-- r= 0 * 10 + 123 mod 10 = 3
+-- n = 123 / 10 = 12
+
+-- n = 12
+-- r = 3
+
+-- r = 3 * 10 + 12 mod 10 = 32
+-- n = 12 / 10 = 1
+
+-- n = 1
+-- r = 32
+
+-- r = 32 * 10 + 1 mod 10 = 321
+-- n = 1 / 10 = 0
+
+reverseDigits :: Integral a => a -> a
+reverseDigits n = reverseDigits' n 0
+    where reverseDigits' n r
+              | n <= 0 = r
+              | otherwise = reverseDigits' n' r'
+              where n' = (n `div` 10) 
+                    r' = ((r * 10) + (n `mod` 10))
+
+palindrome :: Integral a => a -> Bool
+palindrome n = n == (reverseDigits n)
+
+problem4 :: Integral b => Int -> b
+problem4 n = foldl max 0 
+             [x*y | x <- [1..i], y <- [1..i], palindrome (x*y)]
+    where i = largestDigit n
+-- Test: (problem4 3) == 906609
+
+-- erastosthenes
+-- 1) start with 2
+-- 2) mark all factors of 2 false
+-- 3) 
+
 -- Problem 9
 -- A Pythagorean triplet is a set of three natural numbers, a < b < c,
 -- for which, a^2 + b^2 = c^2. For example, 32 + 42 = 9 + 16 = 25 = 52.
