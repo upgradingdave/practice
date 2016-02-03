@@ -35,6 +35,10 @@ problem3 n = problem3' n 2
               | otherwise = problem3' n (i+1)
 -- Test: problem3 600851475143 == 6857
 
+test :: Int -> Int
+test 0 = -1
+test n = test (floor ((fromIntegral n) / 2))
+
 largestDigit :: Num a => Int -> a
 largestDigit 1 = 9
 largestDigit y = (largestDigit (y-1)) + x
