@@ -49,4 +49,10 @@ pcf:
 	cd cljs/upgradingdave; echo "compiling pcf-dev.js ... "; \
 		lein cljsbuild once prod-pcf-devcards
 
+exif: 
+	cd cljs/upgradingdave; echo "compiling exif.js ... "; \
+		lein cljsbuild once prod-exif
+	cd cljs/upgradingdave; echo "compiling exif-dev.js ... "; \
+		lein cljsbuild once prod-exif-devcards
+
 FORCE:

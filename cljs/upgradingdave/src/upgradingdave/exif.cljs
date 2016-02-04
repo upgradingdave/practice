@@ -26,20 +26,22 @@
    (fn []
      (this-as 
       this 
-      (swap! data (fn [old] 
-                    (-> old
-                        (assoc-in [:exif] (js->clj (.-exifdata this)))
-                        (assoc-in [:loading] nil))))))))
+      (let [exifdata (js->clj (.-exifdata this))]
+        (swap! data (fn [old] 
+                      (-> old
+                          (assoc-in [:exif] exifdata)
+                          (assoc-in [:loading] nil)))))))))
 
 (defn handle-file-select [e data]
   (let [files (array-seq (-> e .-target .-files))
-        curr (first (filter image? files))]
+        curr (first (filter image? files))
+        fname (get-file-name curr)]
     (swap! data (fn [old]
                   (-> old
                       (assoc-in [:exif] nil)
                       (assoc-in [:loading] true)
                       (assoc-in [:files] files)
-                      (assoc-in [:selected] (get-file-name curr)))))
+                      (assoc-in [:selected] fname))))
     (process-img curr data)))
 
 (defn file-select [data]
@@ -114,7 +116,6 @@
                       curr   (first (filter 
                                      (fn [i] (= (get-file-name i) chosen)) 
                                      images))]
-
                   (swap! data (fn [old]
                                 (-> old
                                     (assoc-in [:exif] nil)
@@ -154,7 +155,7 @@
            ;; if any files are not images, then show warnings
            (if (not (empty? others))
              [:div {:class "alert alert-danger"} 
-              "Oops, we can only process jpegs, these won't work: "
+              "Oops, this only works for jpg files, ignoring: "
               (apply str (interpose ", " (map #(get-file-name %) others)))])]]
          
          [:div {:class "row"}

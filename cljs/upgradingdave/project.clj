@@ -80,6 +80,22 @@
                                    :asset-path "js/compiled/out"
                                    :output-to  "resources/public/js/compiled/pcf-dev.js"
                                    :optimizations :advanced}}
+
+                       {:id "prod-exif"
+                        :source-paths ["src"]
+                        :compiler {:main       "upgradingdave.exif"
+                                   :devcards   true
+                                   :asset-path "js/compiled/out"
+                                   :output-to  "resources/public/js/compiled/exif.js"
+                                   :optimizations :advanced}}
+
+                       {:id "prod-exif-devcards"
+                        :source-paths ["src"]
+                        :compiler {:main       "upgradingdave.exif-dev"
+                                   :devcards   true
+                                   :asset-path "js/compiled/out"
+                                   :output-to  "resources/public/js/compiled/exif-dev.js"
+                                   :optimizations :advanced}}
 ]}
 
   :figwheel { :css-dirs ["resources/public/css"] })
