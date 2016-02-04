@@ -5,6 +5,7 @@
    [upgradingdave.bmr-dev        :as bmr]
    [upgradingdave.generators-dev :as gen]
    [upgradingdave.pcf-dev        :as pcf]
+   [upgradingdave.exif-dev       :as exif]
    [upgradingdave.compiler       :as compile])
   (:require-macros
    [devcards.core :as dc :refer [defcard deftest]]))

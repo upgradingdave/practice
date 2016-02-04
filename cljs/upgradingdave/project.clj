@@ -6,11 +6,14 @@
 
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.219"]
+
                  [devcards "0.2.1"]
                  [org.clojure/test.check "0.9.0"]
                  [org.clojure/tools.reader "0.10.0-SNAPSHOT"]
                  [com.cognitect/transit-clj "0.8.285"]
-                 [reagent "0.5.1"]]
+                 [reagent "0.5.1"]
+
+                 [cljsjs/exif "2.1.1-1"]]
 
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-figwheel "0.5.0-1"]]
