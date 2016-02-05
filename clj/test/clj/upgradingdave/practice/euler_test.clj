@@ -48,5 +48,7 @@
 (expect 17 (problem10 10))
 ;;(expect 17 (problem10 2000000))
 
+(expect 70600674 (problem11))
+
 
 
