@@ -50,5 +50,6 @@
 
 (expect 70600674 (problem11))
 
+(expect "5537376230" (problem13))
 
 
