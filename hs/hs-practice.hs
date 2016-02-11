@@ -96,3 +96,28 @@ problem4 n = foldl max 0
 -- TODO
 -- problem9 :: (Integral a) => a -> [(a,a,a)]
 -- problem9 x = [(a,b,c) | a+b+c == x, a < b, b < c]
+
+factors :: Integral t => t -> [t]
+factors n = n : if n `mod` 2 == 0 
+                then [x | x <- [1..(n `div` 2)], n `mod` x == 0] 
+                else [x | x <- [1,3..(n `div` 2)], n `mod` x == 0] 
+
+numberOfDivisors n = 2 * (length [x | x <- [1..floor (sqrt (fromIntegral n))], n `mod` x == 0])
+
+-- sum of n from i=1 to n is equal to (n * n+1) / 2
+triangleNumber n = (n * (n+1)) `div` 2
+
+-- triangleNumber n = sum [1..n]
+
+-- triangleNumber' 1 = 1
+-- triangleNumber' n = n + triangleNumber (n - 1)
+
+-- triangleNumbers n last = n + last : [x | x <- triangleNumbers (n+1) (n + last)]
+
+problem12 max = head [x | x <- map triangleNumber [1..], numberOfDivisors x > max]
+
+
+
+
+
+
