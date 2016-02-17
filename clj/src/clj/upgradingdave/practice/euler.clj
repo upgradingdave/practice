@@ -532,3 +532,69 @@
 (defn problem13 []
   (apply str
          (take 10 (str (apply + fifty-digit-numbers)))))
+
+
+(defn next-collatz [n]
+  (if (= (mod n 2) 0)
+    (/ n 2)
+    (inc (* 3 n))))
+
+(defn collatz [n]
+  (loop [n n count 0]
+    (if (<= n 1)
+      (inc count)
+      (recur (next-collatz n) (inc count)))))
+
+(defn problem14 [n]
+  (loop [n n longest 0 x 0]
+    (if (<= n 0)
+      [longest x]
+      (let [count   (collatz n)
+            longer? (> count longest)
+            longest (if longer? count longest)
+            x       (if longer? n     x)]
+        (recur (dec n) longest x)))))
+
+(defn children-fn [n]
+  (fn [[x y]] 
+    (filter identity 
+            [(if (< x n) (update-in [x y] [0] inc))
+             (if (< y n) (update-in [x y] [1] inc))])))
+
+(defn is-branch-fn [n]
+  (fn [[x y]] (or (< y n) (< x n))))
+
+(defn path1 [n]
+  (tree-seq 
+   (is-branch-fn n)
+   (children-fn n)
+   [0 0]))
+
+(defn is-edge-fn [n]
+  (fn [[x y]] (or (>= y n) (>= x n))))
+
+(defn path2 [n]
+  (let [cnt (atom 0)]
+    (letfn [(traverse [node]
+              (if (not ((is-branch-fn n) node))
+                (swap! cnt inc)
+                (mapcat traverse ((children-fn n) node))))]
+      (traverse [0 0]))))
+
+(defn path3 [n]
+  (letfn [(traverse [node]
+            (if ((is-edge-fn n) node)
+              1
+              (reduce + (map traverse ((children-fn n) node)))))]
+    (traverse [0 0])))
+
+(def path
+  (memoize
+   (fn [x y]
+     (if (or (zero? x) (zero? y))
+       1
+       (+ (path (dec x) y) (path x (dec y)))))))
+
+(defn problem15 [n]
+  (path n n))
+
