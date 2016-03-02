@@ -1,3 +1,22 @@
+(def compiled-js-dir "resources/public/js/compiled")
+
+(defn cljs-conf [ns]
+  {:id (str "prod-" ns)
+   :source-paths ["src"]
+   :compiler {:main       (str "upgradingdave." ns)
+              :asset-path "js/compiled/out"
+              :output-to  (str compiled-js-dir "/" ns ".js")
+              :optimizations :advanced}})
+
+(defn cljs-dev-conf [ns]
+  {:id (str "prod-" ns "-devcards")
+   :source-paths ["src"]
+   :compiler {:main       (str "upgradingdave." ns "-dev")
+              :devcards   true
+              :asset-path "js/compiled/out"
+              :output-to  (str compiled-js-dir "/" ns "-dev.js")
+              :optimizations :advanced}})
+
 (defproject upgradingdave "0.1.0-SNAPSHOT"
   :description "Clojurescript Practice"
   :url "http://upgradingdave.com"
@@ -26,76 +45,32 @@
   :cljsbuild {
               :builds [{:id "devcards"
                         :source-paths ["src"]
-                        :figwheel { :devcards true } ;; <- note this
-                        :compiler { :main       "upgradingdave.core"
-                                    :asset-path "js/compiled/devcards_out"
-                                    :output-to  "resources/public/js/compiled/upgradingdave_devcards.js"
-                                    :output-dir "resources/public/js/compiled/devcards_out"
-                                    :source-map-timestamp true }}
+                        :figwheel {:devcards true } ;; <- note this
+                        :compiler {:main       "upgradingdave.core"
+                                   :asset-path "js/compiled/devcards_out"
+                                   :output-to ~(str 
+                                                compiled-js-dir 
+                                                "/upgradingdave_devcards.js")
+                                   :output-dir ~(str 
+                                                 compiled-js-dir 
+                                                 "/devcards_out")
+                                   :source-map-timestamp true }}
 
-                       {:id "prod-pwd"
-                        :source-paths ["src"]
-                        :compiler {:main       "upgradingdave.generators"
-                                   :devcards   true
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/pwd.js"
-                                   :optimizations :advanced}}
+                       ~(cljs-conf "pwd")
+                       ~(cljs-dev-conf "pwd")
 
-                       {:id "prod-pwd-devcards"
-                        :source-paths ["src"]
-                        :compiler {:main       "upgradingdave.generators-dev"
-                                   :devcards   true
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/pwd-dev.js"
-                                   :optimizations :advanced}}
+                       ~(cljs-conf "bmr")
+                       ~(cljs-dev-conf "bmr")
 
-                       {:id "prod-bmr"
-                        :source-paths ["src"]
-                        :compiler {:main       "upgradingdave.bmr"
-                                   :devcards   true
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/bmr.js"
-                                   :optimizations :advanced}}
-                       
-                       {:id "prod-bmr-devcards"
-                        :source-paths ["src"]
-                        :compiler {:main       "upgradingdave.bmr-dev"
-                                   :devcards   true
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/bmr-dev.js"
-                                   :optimizations :advanced}}
+                       ~(cljs-conf "pcf")
+                       ~(cljs-dev-conf "pcf")
 
-                       {:id "prod-pcf"
-                        :source-paths ["src"]
-                        :compiler {:main       "upgradingdave.pcf"
-                                   :devcards   true
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/pcf.js"
-                                   :optimizations :advanced}}
+                       ~(cljs-conf "exif")
+                       ~(cljs-dev-conf "exif")
 
-                       {:id "prod-pcf-devcards"
-                        :source-paths ["src"]
-                        :compiler {:main       "upgradingdave.pcf-dev"
-                                   :devcards   true
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/pcf-dev.js"
-                                   :optimizations :advanced}}
+                       ~(cljs-conf "lattice")
+                       ~(cljs-dev-conf "lattice")
 
-                       {:id "prod-exif"
-                        :source-paths ["src"]
-                        :compiler {:main       "upgradingdave.exif"
-                                   :devcards   true
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/exif.js"
-                                   :optimizations :advanced}}
-
-                       {:id "prod-exif-devcards"
-                        :source-paths ["src"]
-                        :compiler {:main       "upgradingdave.exif-dev"
-                                   :devcards   true
-                                   :asset-path "js/compiled/out"
-                                   :output-to  "resources/public/js/compiled/exif-dev.js"
-                                   :optimizations :advanced}}
-]}
+                       ]}
 
   :figwheel { :css-dirs ["resources/public/css"] })

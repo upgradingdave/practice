@@ -1,4 +1,4 @@
-(ns upgradingdave.generators
+(ns upgradingdave.pwd
   (:require
    [reagent.core :as r]
    [clojure.test.check.generators :as gen]))

@@ -55,4 +55,19 @@ exif:
 	cd cljs/upgradingdave; echo "compiling exif-dev.js ... "; \
 		lein cljsbuild once prod-exif-devcards
 
+lattice: lattice-compile
+	cp ${CLJS_HOME}/resources/public/js/compiled/lattice.js \
+		${BLOG_HOME}/resources/templates/js
+	cp ${CLJS_HOME}/resources/public/js/compiled/lattice-dev.js \
+		${BLOG_HOME}/resources/templates/js
+
+lattice-compile: 
+	cd cljs/upgradingdave; echo "compiling lattice.js ... "; \
+		lein cljsbuild once prod-lattice
+	cd cljs/upgradingdave; echo "compiling lattice-dev.js ... "; \
+		lein cljsbuild once prod-lattice-devcards
+
+clean: 
+	cd cljs/upgradingdave; echo "cleaning cljs ...";\
+		lein clean
 FORCE:

@@ -3,10 +3,11 @@
    #_[om.core :as om :include-macros true]
    [sablono.core :as sab :include-macros true]
    [upgradingdave.bmr-dev        :as bmr]
-   [upgradingdave.generators-dev :as gen]
-   [upgradingdave.pcf-dev        :as pcf]
+   [upgradingdave.compiler       :as compile]
    [upgradingdave.exif-dev       :as exif]
-   [upgradingdave.compiler       :as compile])
+   [upgradingdave.pwd-dev        :as pwd]
+   [upgradingdave.lattice-dev    :as lat]
+   [upgradingdave.pcf-dev        :as pcf])
   (:require-macros
    [devcards.core :as dc :refer [defcard deftest]]))
 

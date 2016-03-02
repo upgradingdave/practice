@@ -1,8 +1,8 @@
-(ns upgradingdave.generators-dev
+(ns upgradingdave.pwd-dev
   (:require
    [devcards.core            :as dc]
    [reagent.core             :as r]
-   [upgradingdave.generators :as gen])
+   [upgradingdave.pwd        :as gen])
   (:require-macros
    [devcards.core :as dc :refer [defcard deftest defcard-doc]]))
 
