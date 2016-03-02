@@ -53,3 +53,50 @@
 (expect "5537376230" (problem13))
 
 (expect 137846528820 (problem15 20))
+
+(expect 1366 (problem16))
+
+(expect 23 (count-letters (numbers 342)))
+
+(expect 20 (count-letters (numbers 115)))
+
+(expect 36 (reduce + (map count-letters (map numbers (range 1 10)))))
+
+(expect 70 (reduce + (map count-letters (map numbers (range 10 20)))))
+
+(expect 19 (reduce + (map count-letters (map numbers (range 1 6)))))
+
+(expect 21124 (problem17))
+
+(expect 1074 (problem18 tri2))
+
+
+(expect 31 (days-in-month 0))
+(expect 28 (days-in-month 1))
+(expect 29 (days-in-month 1 2016))
+(expect 28 (days-in-month 1 2015))
+(expect 31 (days-in-month 2))
+(expect 30 (days-in-month 3))
+(expect 31 (days-in-month 4))
+(expect 30 (days-in-month 5))
+(expect 31 (days-in-month 6))
+(expect 31 (days-in-month 7))
+(expect 30 (days-in-month 8))
+(expect 31 (days-in-month 9))
+(expect 30 (days-in-month 10))
+(expect 31 (days-in-month 11))
+
+(expect true  (is-leap-year? 2016))
+(expect false (is-leap-year? 2015))
+(expect true  (is-leap-year? 2000))
+(expect false (is-leap-year? 2100))
+
+(expect 0 (next-month 0  0 1900))
+(expect 1 (next-month 0  1 1900))
+(expect 1 (next-month 30 0 1900))
+(expect 2 (next-month 28 1 2016))
+
+(expect 1900 (next-year 0  0  1900))
+(expect 1901 (next-year 30 11 1900))
+
+(expect 171 (problem19))

@@ -598,3 +598,158 @@
 (defn problem15 [n]
   (path n n))
 
+(defn pow' [^BigInteger n ^BigInteger m]
+  (loop [acc (biginteger n) i (biginteger m)]
+    (if (<= i 1)
+      (biginteger acc)
+      (recur (biginteger (* (biginteger n) (biginteger acc))) 
+             (biginteger (dec i))))))
+
+(defn add-digits [n]
+  (reduce + (map #(Integer/parseInt (str %)) (seq (str n)))))
+
+(defn problem16 []
+  (add-digits (biginteger (pow' 2 1000))))
+
+(defn ones [n]
+  (case n
+))
+
+(defn numbers [n]
+  (cond 
+    (= n 1)  "one"
+    (= n 2)  "two"
+    (= n 3) "three"
+    (= n 4)  "four"
+    (= n 5)  "five"
+    (= n 6)  "six"
+    (= n 7)  "seven"
+    (= n 8)  "eight"
+    (= n 9)  "nine"
+    (= n 10) "ten"
+    (= n 11) "eleven"
+    (= n 12) "twelve"
+    (= n 13) "thirteen"
+    (= n 14) "fourteen"
+    (= n 15) "fifteen"
+    (= n 16) "sixteen"
+    (= n 17) "seventeen"
+    (= n 18) "eighteen"
+    (= n 19) "nineteen"
+    (= n 20) "twenty"
+    (= n 30) "thirty"
+    (= n 40) "forty"
+    (= n 50) "fifty"
+    (= n 60) "sixty"
+    (= n 70) "seventy"
+    (= n 80) "eighty"
+    (= n 90) "ninety"
+    (= n 1000) "one thousand"
+    
+    (> n 99)
+    (if (= (mod n 100) 0)
+      (str (numbers (int (/ n 100))) " hundred")
+      (str (numbers (int (/ n 100))) " hundred and " (numbers (mod n 100))))
+    
+    (< n 100)
+    (str (numbers (* 10 (int (/ n 10)))) " " (numbers (mod n 10)))
+
+    :else nil))
+
+(defn count-letters [s]
+  (count (apply str (clojure.string/split s #" "))))
+
+(defn problem17 []
+  (reduce + (map count-letters (map numbers (range 1 1001)))))
+
+(def tri1
+  [3 7 4 2 4 6 8 5 9 3])
+
+(def tri2
+  [75 95 64 17 47 82 18 35 87 10 20  4 82 47 65 19  1 23 75  3 34 88  2 77 73 
+    7 63 67 99 65  4 28  6 16 70 92 41 41 26 56 83 40 80 70 33 41 48 72 33 47 
+   32 37 16 94 29 53 71 44 65 25 43 91 52 97 51 14 70 11 33 28 77 73 17 78 39 
+   68 17 57 91 71 52 38 17 14 91 43 58 50 27 29 48 63 66  4 68 89 53 67 30 73 
+   16 69 87 40 31  4 62 98 27 23  9 70 98 73 93 38 53 60  4 23])
+
+(defn tri-dist [s]
+  "As it traverses a collection of path weights (like tri1 or tri2),
+  it creates a node for each that looks like: [idx level weight
+  value]. level is the level in the tree and also the number of
+  siblings for each node. weight is the max path to get to that node"
+  (loop [s s acc [] level 1]
+    (let [x       (into [] (take level s))
+          xs      (into [] (drop level s))
+          offset  (count acc)]
+      (if (not (empty? x))
+        (recur 
+         xs 
+         (apply 
+          conj 
+          acc (map-indexed 
+               (fn [i x] 
+                 (let [idx      (+ offset i)
+                       level'   (dec level)
+                       idxl     (- idx level)
+                       idxr     (- idx (dec level))
+                       lv       (if (> i 0) (get (get acc idxl) 2) 0)
+                       rv       (if (< i (dec level)) (get (get acc idxr) 2) 0)
+                       maxpath  (max lv rv)]
+                   (vector idx level (+ x maxpath) x))) x)) (inc level))
+        acc))))
+
+(defn problem18 [tri]
+  (apply max (map #(get % 2) (tri-dist tri))))
+
+(def std-days-in-month
+  [31 28 31 30 31 30 31 31 30 31 30 31])
+
+(def days-in-week
+  ["Monday" "Tuesday" "Wednesday" "Thursday" 
+   "Friday" "Saturday" "Sunday"])
+
+(defn is-leap-year? [year]
+  (if (nil? year) year
+      (if (= (mod year 100) 0)
+        (= (mod year 400) 0)
+        (= (mod year 4) 0))))
+
+(defn days-in-month [month & [year]]
+  (if (and (= month 1) (is-leap-year? year)) 29
+      (get std-days-in-month month)))
+
+(defn next-month [day month year]
+  (let [total-days    (days-in-month month year)
+        next-possible (if (>= month 11) 0 (inc month))]
+    (if (>= (inc day) total-days) 
+      next-possible 
+      month)))
+
+(defn next-year [day month year]
+  (if (and (= month 11) (>= day 30))
+    (inc year)
+    year))
+
+(defn get-next-day [day dow month year]
+  (let [total-days (days-in-month month year)
+        next-day   (if (>= (inc day) total-days) 0 (inc day))
+        next-dow   (if (>= dow 6) 0 (inc dow))
+        next-mo    (next-month day month year)
+        next-yr    (next-year day month year)]
+    [next-day next-dow next-mo next-yr]))
+
+(defn problem19 []
+  (let [max-day   30
+        max-month 11
+        max-year  2001]
+    (loop [day 0 dow 0 month 0 year 1900 acc 0]
+      ;; (println [day (get days-in-week dow) month year])
+      (if (and (< year max-year))
+        (let [[next-day next-dow next-mo next-yr] 
+              (get-next-day day dow month year)
+              first-sundays (if (and (= day 0) (> year 1900) (= 6 dow)) 
+                              (inc acc) acc)]
+          ;;(if (= day 0) (println (get days-in-week dow)))
+          (recur next-day next-dow next-mo next-yr first-sundays))
+        acc
+        ))))
