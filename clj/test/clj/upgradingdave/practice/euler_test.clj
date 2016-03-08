@@ -100,3 +100,9 @@
 (expect 1901 (next-year 30 11 1900))
 
 (expect 171 (problem19))
+
+(expect 3628800 (factorial 10))
+
+(expect 27 (problem20 10))
+
+(expect 648 (problem20 100))

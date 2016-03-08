@@ -753,3 +753,11 @@
           (recur next-day next-dow next-mo next-yr first-sundays))
         acc
         ))))
+
+(defn factorial [^BigInteger n]
+  (if (= n 1)
+    1
+    (* n (factorial (biginteger (dec n))))))
+
+(defn problem20 [^BigInteger n]
+  (add-digits (factorial n)))
