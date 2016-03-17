@@ -761,3 +761,27 @@
 
 (defn problem20 [^BigInteger n]
   (add-digits (factorial n)))
+
+
+;; d(1) = 1
+;; d(3) = 1
+
+(defn amicable 
+  "acc is list of sums of factors of each number from i to n. compare
+  each sum to see if it matches sum of factors in acc. If so, add to
+  results."
+  [n]
+  (loop [i 1 acc [] results #{}]
+    (if (> i n)
+      results
+      (let [fs  (factors i)
+            s   (apply + fs)
+            res (concat (filter #(= [s i] %) acc) results)]
+        (recur (inc i) (conj acc [i s]) res)))))
+
+(defn problem21
+  "amicable will return a list of amicable pairs like '([220 284]), so
+  we just need to sum them up "
+  [n]
+  (reduce (fn [a b] (+ a (apply + b))) 0 (amicable n)))
+

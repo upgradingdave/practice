@@ -106,3 +106,6 @@
 (expect 27 (problem20 10))
 
 (expect 648 (problem20 100))
+
+(expect 504 (problem21 284))
+
