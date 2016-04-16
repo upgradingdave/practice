@@ -6,7 +6,9 @@
    :compiler {:main       (str "upgradingdave." ns)
               :asset-path "js/compiled/out"
               :output-to  (str compiled-js-dir "/" ns ".js")
-              :optimizations :advanced}})
+              :optimizations :advanced
+              ;;:optimizations :none
+              }})
 
 (defn cljs-dev-conf [ns]
   {:id (str "prod-" ns "-devcards")
@@ -32,7 +34,8 @@
                  [com.cognitect/transit-clj "0.8.285"]
                  [reagent "0.5.1"]
 
-                 [cljsjs/exif "2.1.1-1"]]
+                 [cljsjs/exif "2.1.1-1"]
+                 [cljsjs/ical "1.2.1-1"]]
 
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-figwheel "0.5.0-1"]]
@@ -70,6 +73,9 @@
 
                        ~(cljs-conf "lattice")
                        ~(cljs-dev-conf "lattice")
+
+                       ~(cljs-conf "ics")
+                       ~(cljs-dev-conf "ics")
 
                        ]}
 

@@ -1,6 +1,9 @@
 elisp: el/euler.el
 	emacs -batch -l ert -l el/euler.el -f ert-run-tests-batch-and-exit
 
+js: FORCE
+	cd js; mocha;
+
 # Haskell (wip, need to figure out how to write tests)
 hs: cabal-sandbox
 	cabal-install
@@ -54,6 +57,20 @@ exif:
 		lein cljsbuild once prod-exif
 	cd cljs/upgradingdave; echo "compiling exif-dev.js ... "; \
 		lein cljsbuild once prod-exif-devcards
+
+ics: ics-compile
+	cp ${CLJS_HOME}/resources/public/js/compiled/ics.js \
+		${BLOG_HOME}/resources/templates/js
+	cp ${CLJS_HOME}/resources/public/js/compiled/ics-dev.js \
+		${BLOG_HOME}/resources/templates/js
+
+ics-compile: 
+	rm -f cljs/upgradingdave/resources/public/js/compiled/ics.js
+	cd cljs/upgradingdave; echo "compiling ics.js ... "; \
+		lein cljsbuild once prod-ics
+	rm -f cljs/upgradingdave/resources/public/js/compiled/ics-dev.js
+	cd cljs/upgradingdave; echo "compiling ics-dev.js ... "; \
+		lein cljsbuild once prod-ics-devcards
 
 lattice: lattice-compile
 	cp ${CLJS_HOME}/resources/public/js/compiled/lattice.js \

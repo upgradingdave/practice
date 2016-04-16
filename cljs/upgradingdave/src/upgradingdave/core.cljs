@@ -7,7 +7,8 @@
    [upgradingdave.exif-dev       :as exif]
    [upgradingdave.pwd-dev        :as pwd]
    [upgradingdave.lattice-dev    :as lat]
-   [upgradingdave.pcf-dev        :as pcf])
+   [upgradingdave.pcf-dev        :as pcf]
+   [upgradingdave.ics-dev        :as ics])
   (:require-macros
    [devcards.core :as dc :refer [defcard deftest]]))
 
