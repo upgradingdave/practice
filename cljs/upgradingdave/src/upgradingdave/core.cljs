@@ -8,7 +8,8 @@
    [upgradingdave.pwd-dev        :as pwd]
    [upgradingdave.lattice-dev    :as lat]
    [upgradingdave.pcf-dev        :as pcf]
-   [upgradingdave.ics-dev        :as ics])
+   [upgradingdave.ics-dev        :as ics]
+   [upgradingdave.resize-dev        :as resize])
   (:require-macros
    [devcards.core :as dc :refer [defcard deftest]]))
 

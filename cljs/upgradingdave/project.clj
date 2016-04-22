@@ -77,6 +77,9 @@
                        ~(cljs-conf "ics")
                        ~(cljs-dev-conf "ics")
 
+                       ~(cljs-conf "resize")
+                       ~(cljs-dev-conf "resize")
+
                        ]}
 
   :figwheel { :css-dirs ["resources/public/css"] })
