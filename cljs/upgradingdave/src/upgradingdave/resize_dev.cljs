@@ -10,12 +10,14 @@
    [devcards.core :as dc :refer [defcard deftest defcard-doc]]
    [cljs.test            :refer [is testing]]))
 
-(def data (r/atom {}))
+(def data (r/atom {}
+                  ;;{:max-width 1024}
+           ))
 
 (defcard 
   "### Photo Editor"
   (dc/reagent 
-   (fn [data _] [resize/photo-editor data]))
+   (fn [data _] [resize/resize-tool data]))
   data
   {:inspect-data true})
 
@@ -40,6 +42,3 @@
   (dc/reagent 
    (fn [data _] [resize/resize-tool data {:html5-file-api-supported? false}]))
   data)
-
-
-(resize/create-image data)
