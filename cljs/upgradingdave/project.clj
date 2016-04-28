@@ -59,23 +59,23 @@
                                                  "/devcards_out")
                                    :source-map-timestamp true }}
 
-                       ~(cljs-conf "pwd")
-                       ~(cljs-dev-conf "pwd")
-
                        ~(cljs-conf "bmr")
                        ~(cljs-dev-conf "bmr")
-
-                       ~(cljs-conf "pcf")
-                       ~(cljs-dev-conf "pcf")
 
                        ~(cljs-conf "exif")
                        ~(cljs-dev-conf "exif")
 
+                       ~(cljs-conf "ics")
+                       ~(cljs-dev-conf "ics")
+
                        ~(cljs-conf "lattice")
                        ~(cljs-dev-conf "lattice")
 
-                       ~(cljs-conf "ics")
-                       ~(cljs-dev-conf "ics")
+                       ~(cljs-conf "pcf")
+                       ~(cljs-dev-conf "pcf")
+
+                       ~(cljs-conf "pwd")
+                       ~(cljs-dev-conf "pwd")
 
                        ~(cljs-conf "resize")
                        ~(cljs-dev-conf "resize")

@@ -1,6 +1,7 @@
 (ns upgradingdave.resize
   (:require [reagent.core :as r]
             [goog.date :as dt]
+            [clojure.string      :as str]
             [upgradingdave.csv   :as csv]
             [upgradingdave.html5 :as html5]))
 
@@ -125,13 +126,6 @@
                              (aset "width" width)
                              (aset "height" height))
               final-ctx    (.getContext final-canvas "2d")]
-          (js/console.log "finalizing")
-          (js/console.log "going from")
-          (js/console.log prev-width)
-          (js/console.log prev-height)
-          (js/console.log "... to ...")
-          (js/console.log width)
-          (js/console.log height)
           (.drawImage final-ctx img-or-canvas 
                       0 0 prev-width prev-height
                       0 0 width height
@@ -143,12 +137,6 @@
               next-width'  (* step next-width)
               prev-height' next-height
               next-height' (* step next-height)]
-          (js/console.log "PREV")
-          (js/console.log prev-width)
-          (js/console.log prev-height)
-          (js/console.log "NEXT")
-          (js/console.log next-width)
-          (js/console.log next-height)
           (.drawImage ctx img-or-canvas 0 0 prev-width prev-height 
                       0 0 next-width next-height)
           (recur prev-width' prev-height' next-width' next-height' canvas ctx)
@@ -230,59 +218,89 @@
   (let [{:keys [width height]} (:photo @data)
         img                    (:image @data)
         selected               (:selected @data)]
-    [:button {:class "btn btn-primary"
-              :on-click 
-              (fn [evt] 
-                (swap! data assoc-in [:working] true)
-                (let [canvas (resize-in-steps img width height)
-                      name   (str (get-base-file-name selected)
-                                  "_" (.toFixed width 2) 
-                                  "_" (.toFixed height 2) ".jpg")
-                      photo  (-> (new-image img max-thumb-size)
-                                 (assoc :url (.toDataURL canvas 
-                                                         "image/jpg" 0.7))
-                                 (assoc :name name)
-                                 (assoc :width width)
-                                 (assoc :height height)
-                                 (limit-width max-thumb-size))]
-                  (swap! data (fn [old]
-                                (let [resized (into 
-                                               [] (take-last 3 (:resized old)))
-                                      resized' (conj resized photo)]
-                                  (-> (assoc old :resized resized')
-                                      (assoc :working false)))))
-                  (.preventDefault evt)))}
-     (str "Resize to " (.toFixed width 2) " X " (.toFixed height 2))]))
+    [:div {:class "row"}
+     [:div {:class "col-xs-3"}
+      [:button {:class "btn btn-primary"
+                :on-click 
+                (fn [evt] 
+                  ;; (swap! data assoc-in [:working] true)
+                  ;; (js/setTimeout ;; need to use async to coordinate
+                  (let [canvas (resize-in-steps img width height)
+                        name   (str (get-base-file-name selected)
+                                    "_" (.toFixed width 2) 
+                                    "_" (.toFixed height 2) ".jpg")
+                        photo  (-> (new-image img max-thumb-size)
+                                   (assoc :url 
+                                          (.toDataURL canvas 
+                                                      "image/jpg" 0.7))
+                                   (assoc :name name)
+                                   (assoc :width width)
+                                   (assoc :height height)
+                                   (limit-width max-thumb-size))]
+                    (swap! data (fn [old]
+                                  (let [resized 
+                                        (into [] (take-last 3 (:resized old)))
+                                        resized' (conj resized photo)]
+                                    (assoc old :resized resized'))))
+                    (.preventDefault evt))
+                  ;; 500) end time out, I need to use async
+                )}
+       (str "Resize to " (.toFixed width 2) " X " (.toFixed height 2))]]
+     [:div {:class "col-xs-9"} 
+      (if (:working @data) 
+        [:div {:class "alert alert-warning"} (str "Generating Resized Image "
+                                               "... Please Wait ...")])]]))
+
+(defn open-image [photo]
+  (fn [_]
+    (doto (js/window.open (:url photo)))))
 
 (defn resize-downloads [data]
-  (if (empty? (:resized @data))
-    [:div {:class "row"}
-     [:div {:class "col-xs-12"}
-      [:p {:class "text-info"} (str "Choose size and click the resize button. "
-                                    "Resized images will appear here.")]]]
+  (r/create-class
+   {;; :component-did-update
+    ;; (fn [_] (
+    ;;   (swap! data assoc :working false))
 
-    [:div {:id "resized-downloads"}
-     [:div {:class "row"}
-      [:div {:class "col-xs-12"}
-       [:h3 "Resized"]
-       [:p {:class "text-info"} "Click download or right click and 'save as'"]]]
+    :reagent-render
+    (fn [data]
+      (if (empty? (:resized @data))
+        [:div {:class "row"}
+         [:div {:class "col-xs-12"}
+          [:p {:class "text-info"} (str "Enter a new width or height, or use "
+                                        "the slider and then click the "
+                                        "resize button to resize the image. "
+                                        "Resized images will appear here.")]]]
 
-     [:div {:class "row"}
-      (doall 
-       (for [v (:resized @data)]
-         (let [{:keys [width height display-width display-height url name]} v]
-           ^{:key (gensym)} [:div {:class "col-sm-3"}
-                             [:div {:class "thumbnail"}
-                              [:img {:width  (min display-width)
-                                     :height (min display-height)
-                                     :src url}]
-                              [:h4 (str (.toFixed width 2) " X " 
-                                        (.toFixed height 2))]
-                              [:a {:class "btn btn-default"
-                                   :href url
-                                   :download name} 
-                               "Download"]
-                              ]])))]]))
+        [:div {:id "resized-downloads"}
+         [:div {:class "row"}
+          [:div {:class "col-xs-12"}
+           [:h3 "Resized"]
+           [:p {:class "text-info"} (str "If the \"Download\" button doesn't "
+                                         "work, right click on the thumbnail "
+                                         "and choose \"Save Image As ...\"")]]]
+
+         [:div {:class "row"}
+          (doall 
+           (for [v (:resized @data)]
+             (let [{:keys [width height display-width 
+                           display-height url name]} v]
+               ^{:key (gensym)} [:div {:class "col-sm-3"}
+                                 [:div {:class "thumbnail"}
+                                  [:img {:width  (min display-width)
+                                         :height (min display-height)
+                                         :src url
+                                         ;; :on-load #(swap! data assoc 
+                                         ;;                  :working false)
+                                         }]
+                                  [:h4 (str (.toFixed width 2) " X " 
+                                            (.toFixed height 2))]
+                                  [:a {:class "btn btn-default"
+                                       ;;:href url
+                                       ;;:download name
+                                       :on-click (open-image v)
+                                       } 
+                                   "Download"]
+                                  ]])))]]))}))
 
 (defn photo-editor [data]
   (if (:loading @data)

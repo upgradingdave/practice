@@ -10,9 +10,7 @@
    [devcards.core :as dc :refer [defcard deftest defcard-doc]]
    [cljs.test            :refer [is testing]]))
 
-(def data (r/atom {}
-                  ;;{:max-width 1024}
-           ))
+(def data (r/atom {}))
 
 (defcard 
   "### Photo Editor"

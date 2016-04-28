@@ -22,6 +22,7 @@ cljs: FORCE
 # cljs Builds
 BLOG_HOME=/Users/dparoulek/code/upgradingdave
 CLJS_HOME=/Users/dparoulek/code/practice/cljs/upgradingdave
+
 bmr: bmr-compile
 	cp ${CLJS_HOME}/resources/public/js/compiled/bmr.js \
 		${BLOG_HOME}/resources/templates/js
@@ -33,24 +34,6 @@ bmr-compile:
 		lein cljsbuild once prod-bmr 
 	cd cljs/upgradingdave; echo "compiling bmr-dev.js ... "; \
 		lein cljsbuild once prod-bmr-devcards
-
-pwd: pwd-compile
-	cp ${CLJS_HOME}/resources/public/js/compiled/pwd.js \
-		${BLOG_HOME}/resources/templates/js
-	cp ${CLJS_HOME}/resources/public/js/compiled/pwd-dev.js \
-		${BLOG_HOME}/resources/templates/js
-
-pwd-compile:
-	cd cljs/upgradingdave; echo "compiling pwd.js ... "; \
-		lein cljsbuild once prod-pwd
-	cd cljs/upgradingdave; echo "compiling pwd-dev.js ... "; \
-		lein cljsbuild once prod-pwd-devcards
-
-pcf: 
-	cd cljs/upgradingdave; echo "compiling pcf.js ... "; \
-		lein cljsbuild once prod-pcf
-	cd cljs/upgradingdave; echo "compiling pcf-dev.js ... "; \
-		lein cljsbuild once prod-pcf-devcards
 
 exif: 
 	cd cljs/upgradingdave; echo "compiling exif.js ... "; \
@@ -83,6 +66,30 @@ lattice-compile:
 		lein cljsbuild once prod-lattice
 	cd cljs/upgradingdave; echo "compiling lattice-dev.js ... "; \
 		lein cljsbuild once prod-lattice-devcards
+
+pcf: 
+	cd cljs/upgradingdave; echo "compiling pcf.js ... "; \
+		lein cljsbuild once prod-pcf
+	cd cljs/upgradingdave; echo "compiling pcf-dev.js ... "; \
+		lein cljsbuild once prod-pcf-devcards
+
+pwd: pwd-compile
+	cp ${CLJS_HOME}/resources/public/js/compiled/pwd.js \
+		${BLOG_HOME}/resources/templates/js
+	cp ${CLJS_HOME}/resources/public/js/compiled/pwd-dev.js \
+		${BLOG_HOME}/resources/templates/js
+
+pwd-compile:
+	cd cljs/upgradingdave; echo "compiling pwd.js ... "; \
+		lein cljsbuild once prod-pwd
+	cd cljs/upgradingdave; echo "compiling pwd-dev.js ... "; \
+		lein cljsbuild once prod-pwd-devcards
+
+resize: 
+	cd cljs/upgradingdave; echo "compiling resize.js ... "; \
+		lein cljsbuild once prod-resize
+	cd cljs/upgradingdave; echo "compiling resize-dev.js ... "; \
+		lein cljsbuild once prod-resize-devcards
 
 clean: 
 	cd cljs/upgradingdave; echo "cleaning cljs ...";\
