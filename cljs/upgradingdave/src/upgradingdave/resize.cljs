@@ -275,8 +275,9 @@
          [:div {:class "row"}
           [:div {:class "col-xs-12"}
            [:h3 "Resized"]
-           [:p {:class "text-info"} (str "If the \"Download\" button doesn't "
-                                         "work, right click on the thumbnail "
+           [:p {:class "text-info"} (str "If the \"Download\" and/or \"Open\" "
+                                         " buttons don't work, "
+                                         "try right clicking on the thumbnail "
                                          "and choose \"Save Image As ...\"")]]]
 
          [:div {:class "row"}
@@ -294,12 +295,17 @@
                                          }]
                                   [:h4 (str (.toFixed width 2) " X " 
                                             (.toFixed height 2))]
-                                  [:a {:class "btn btn-default"
-                                       ;;:href url
-                                       ;;:download name
-                                       :on-click (open-image v)
-                                       } 
-                                   "Download"]
+                                  [:div {:class "btn-group"}
+                                   [:a {:class "btn btn-default"
+                                        :href url
+                                        :download name} 
+                                    "Download"]
+                                   [:a {:class "btn btn-default"
+                                        ;;:href url
+                                        ;;:download name
+                                        :on-click (open-image v)
+                                        } 
+                                    "Open"]]
                                   ]])))]]))}))
 
 (defn photo-editor [data]

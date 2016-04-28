@@ -85,7 +85,13 @@ pwd-compile:
 	cd cljs/upgradingdave; echo "compiling pwd-dev.js ... "; \
 		lein cljsbuild once prod-pwd-devcards
 
-resize: 
+resize: resize-compile
+	cp ${CLJS_HOME}/resources/public/js/compiled/resize.js \
+		${BLOG_HOME}/resources/templates/js
+	cp ${CLJS_HOME}/resources/public/js/compiled/resize-dev.js \
+		${BLOG_HOME}/resources/templates/js
+
+resize-compile: 
 	cd cljs/upgradingdave; echo "compiling resize.js ... "; \
 		lein cljsbuild once prod-resize
 	cd cljs/upgradingdave; echo "compiling resize-dev.js ... "; \
