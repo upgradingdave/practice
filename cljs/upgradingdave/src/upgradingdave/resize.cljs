@@ -214,29 +214,40 @@
 
 (def max-thumb-size 150)
 
-(defn do-resize [data]
-  (fn [evt] 
-    (let [{:keys [width height]} (:photo @data)
-          img                    (:image @data) 
-          selected               (:selected @data)
-          canvas (resize-in-steps img width height)
-          url    (.toDataURL canvas "image/jpg" 0.7)
-          name   (str (get-base-file-name selected)
+(defn finish-resize [data url]
+  (let [{:keys [width height]} (:photo @data)
+        img      (:image @data) 
+        selected (:selected @data)
+        name     (str (get-base-file-name selected)
                       "_" (.toFixed width 2) 
                       "_" (.toFixed height 2) ".jpg")
-          photo  (-> (new-image img max-thumb-size)
+        photo    (-> (new-image img max-thumb-size)
                      (assoc :url url)
                      (assoc :name name)
                      (assoc :width width)
                      (assoc :height height)
                      (limit-width max-thumb-size))]
+
       (swap! data (fn [old]
                     (let [resized 
                           (into [] (take-last 3 (:resized old)))
                           resized' (conj resized photo)]
-                      (assoc old :resized resized'))))
-      (.preventDefault evt))
-    ))
+                      (assoc old :resized resized'))))))
+
+;;.toDataURL canvas "image/jpg" 0.7
+(defn do-resize [data]
+  (fn [evt] 
+    (let [{:keys [width height]} (:photo @data)
+          img                    (:image @data) 
+          canvas (resize-in-steps img width height)]
+      (html5/to-blob canvas
+                     (fn [blob]
+                       (let [url (js/URL.createObjectURL blob)]
+                         (finish-resize data url))
+                       )
+                     "image/jpg"
+                     0.7)
+      (.preventDefault evt))))
 
 (defn resize-button [data]
   (let [{:keys [width height]} (:photo @data)
@@ -254,7 +265,6 @@
 (defn open-image [photo]
   (fn [_]
     (let [url (:url photo)]
-      (js/console.log (.-length url))
       (doto (js/window.open (:url photo))))))
 
 (defn resize-downloads [data]
@@ -276,11 +286,7 @@
         [:div {:id "resized-downloads"}
          [:div {:class "row"}
           [:div {:class "col-xs-12"}
-           [:h3 "Resized"]
-           [:p {:class "text-info"} (str "If the \"Download\" and/or \"Open\" "
-                                         " buttons don't work, "
-                                         "try right clicking on the thumbnail "
-                                         "and choose \"Save Image As ...\"")]]]
+           [:h3 "Resized"]]]
 
          [:div {:class "row"}
           (doall 
