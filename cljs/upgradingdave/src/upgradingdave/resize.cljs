@@ -214,37 +214,37 @@
 
 (def max-thumb-size 150)
 
+(defn do-resize [data]
+  (fn [evt] 
+    (let [{:keys [width height]} (:photo @data)
+          img                    (:image @data) 
+          selected               (:selected @data)
+          canvas (resize-in-steps img width height)
+          url    (.toDataURL canvas "image/jpg" 0.7)
+          name   (str (get-base-file-name selected)
+                      "_" (.toFixed width 2) 
+                      "_" (.toFixed height 2) ".jpg")
+          photo  (-> (new-image img max-thumb-size)
+                     (assoc :url url)
+                     (assoc :name name)
+                     (assoc :width width)
+                     (assoc :height height)
+                     (limit-width max-thumb-size))]
+      (swap! data (fn [old]
+                    (let [resized 
+                          (into [] (take-last 3 (:resized old)))
+                          resized' (conj resized photo)]
+                      (assoc old :resized resized'))))
+      (.preventDefault evt))
+    ))
+
 (defn resize-button [data]
   (let [{:keys [width height]} (:photo @data)
-        img                    (:image @data)
-        selected               (:selected @data)]
+        img                    (:image @data)]
     [:div {:class "row"}
      [:div {:class "col-xs-3"}
       [:button {:class "btn btn-primary"
-                :on-click 
-                (fn [evt] 
-                  ;; (swap! data assoc-in [:working] true)
-                  ;; (js/setTimeout ;; need to use async to coordinate
-                  (let [canvas (resize-in-steps img width height)
-                        name   (str (get-base-file-name selected)
-                                    "_" (.toFixed width 2) 
-                                    "_" (.toFixed height 2) ".jpg")
-                        photo  (-> (new-image img max-thumb-size)
-                                   (assoc :url 
-                                          (.toDataURL canvas 
-                                                      "image/jpg" 0.7))
-                                   (assoc :name name)
-                                   (assoc :width width)
-                                   (assoc :height height)
-                                   (limit-width max-thumb-size))]
-                    (swap! data (fn [old]
-                                  (let [resized 
-                                        (into [] (take-last 3 (:resized old)))
-                                        resized' (conj resized photo)]
-                                    (assoc old :resized resized'))))
-                    (.preventDefault evt))
-                  ;; 500) end time out, I need to use async
-                )}
+                :on-click (do-resize data)}
        (str "Resize to " (.toFixed width 2) " X " (.toFixed height 2))]]
      [:div {:class "col-xs-9"} 
       (if (:working @data) 
@@ -253,7 +253,9 @@
 
 (defn open-image [photo]
   (fn [_]
-    (doto (js/window.open (:url photo)))))
+    (let [url (:url photo)]
+      (js/console.log (.-length url))
+      (doto (js/window.open (:url photo))))))
 
 (defn resize-downloads [data]
   (r/create-class

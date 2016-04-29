@@ -40,3 +40,5 @@
   (dc/reagent 
    (fn [data _] [resize/resize-tool data {:html5-file-api-supported? false}]))
   data)
+
+(dc/start-devcard-ui!)
