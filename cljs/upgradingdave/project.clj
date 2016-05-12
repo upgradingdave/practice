@@ -4,7 +4,7 @@
   {:id (str "prod-" ns)
    :source-paths ["src"]
    :compiler {:main       (str "upgradingdave." ns)
-              :asset-path "js/compiled/out"
+             :asset-path "js/compiled/out"
               :output-to  (str compiled-js-dir "/" ns ".js")
               :optimizations :advanced
               ;;:optimizations :none
@@ -32,7 +32,8 @@
                  [org.clojure/test.check "0.9.0"]
                  [org.clojure/tools.reader "0.10.0-SNAPSHOT"]
                  [com.cognitect/transit-clj "0.8.285"]
-                 [reagent "0.5.1"]
+                 [reagent "0.5.1" :exclusions [cljsjs/react]]
+                 [cljsjs/react-with-addons "15.0.2-0"]
 
                  [cljsjs/exif "2.1.1-1"]
                  [cljsjs/ical "1.2.1-1"]]
