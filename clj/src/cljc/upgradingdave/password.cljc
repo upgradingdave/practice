@@ -2,7 +2,9 @@
   (:require #?(:clj  [clojure.spec       :as s]
                :cljs [cljs.spec          :as s])
             #?(:clj  [clojure.spec.gen   :as gen]
-               :cljs [cljs.spec.impl.gen :as gen])))
+               :cljs [cljs.spec.impl.gen :as gen])
+            #?(:clj  [upgradingdave.password-macros :refer [and']]
+               :cljs [upgradingdave.password-macros :refer-macros [and']])))
 
 (def char-lowers (into #{} (map char (range 97 122))))
 (def char-lower? char-lowers)
@@ -25,90 +27,55 @@
 (def char-symbols #{\! \$ \^ \&})
 (def char-symbol? char-symbols)
 
-;; valid char generator
-(defn gen-chars [& args]
-  (apply gen/vector
-         (concat [(gen/one-of [(gen/elements char-lower?)
-                               (gen/elements char-upper?)
-                               (gen/elements char-digit?)
-                               (gen/elements char-symbol?)])] args)))
-
-(defn gen-two-symbols []
-  (gen/fmap (fn [[a b]] (apply str (shuffle (concat a b))))
-            (gen/tuple (gen/vector-distinct (gen/elements char-symbol?) 
-                                            {:min-elements 2}) 
-                       (gen-chars))))
-(s/def ::two-symbols
-  (s/with-gen
-    (s/and string? #(<= 2 (count (filter char-symbol? (into #{} %)))))
-    gen-two-symbols))
-
-
-;; Password
-(defn gen-password []
-  (gen/fmap (fn [[a b c d e]] 
-              (let [;; make sure we satisfy the rules
-                    rules (concat a b c d) 
-                    ;; replace first chars in random string with rules
-                    end   (concat rules (subvec e (- (count rules) 1)))]
-                (apply str (shuffle end))))
-            (gen/tuple (gen/vector-distinct (gen/elements char-lower?) 
-                                            {:num-elements 2})
-                       (gen/vector-distinct (gen/elements char-upper?) 
-                                            {:num-elements 2})
-                       (gen/vector-distinct (gen/elements char-digit?) 
-                                            {:num-elements 2})
-                       (gen/vector-distinct (gen/elements char-symbol?) 
-                                            {:num-elements 2})
-                       ;; generate between 10 and 15 chars
-                       (gen-chars 10 15))))
-
-(s/def ::10-to-15-chars (s/and string? #(s/int-in-range? 10 16 (count %))))
-
-(s/def ::password
-  (s/with-gen 
-    (s/and ::two-lowers
-           ::two-uppers
-           ::two-digits
-           ::two-symbols
-           ::10-to-15-chars)
-    gen-password))
-
-(defn create-password []
-  (gen/generate (s/gen ::password)))
-
-(s/fdef create-password
-        :args empty?
-        :ret ::password)
-
-(defn gen-concat [& gens]
-  (gen/fmap (fn [gens] (apply concat gens))
-            (apply gen/tuple gens)))
-
-
-;; Here's a specification for the rules for a password generator
-
 (def max-chars 1000)
 
-(s/def ::max                (s/int-in 1 max-chars))
-(s/def ::min                (s/int-in 0 max-chars))
+(s/def ::max   (s/int-in 1 max-chars))
+(s/def ::min   (s/int-in 0 max-chars))
+(s/def ::class keyword?)
+(s/def ::valid set?)
 
 (s/def ::password-class
-  (s/keys :req [::class
-                ::valid]))
+  (s/keys :req [::class 
+                ::valid
+                ::min]))
 
-;; TODO: password-conf spec should also define the following: 
-;; max-length must be greater than min-length
+(defn create-class-spec
+  [{min-count ::min valid-chars ::valid}]
+  (s/and string? #(<= min-count (count (filter valid-chars (into #{} %))))))
+
+(s/fdef create-class-spec
+        :args (s/cat :password-class ::password-class))
+
+(defn create-class-gen 
+  "Create a character class generator based on class definition"
+  [{min-count ::min valid-chars ::valid}]
+  (gen/vector-distinct (gen/elements valid-chars) 
+                       {:num-elements min-count}))
+
+(s/fdef create-class-gen
+        :args ::password-class)
+
+(defn class-mins-total 
+  "Take all the character class minimums and tally them up"
+  [{classes ::valid-char-classes}]
+  (reduce + (map ::min classes)))
+  
+;; sum of all char class mins cannot be greater than min-length
 (s/def ::password-conf 
-  (s/keys :req [::min-length 
-                ::max-length
-                ::valid-char-classes]))
+  (s/and
+   (s/keys :req [::min-length 
+                 ::max-length
+                 ::valid-char-classes])
+   ;; min-length must be at least as big as sum of minimums of various
+   ;; char classes
+   #(>= (::min-length %) (class-mins-total %))
+   #(>= (::max-length %) (::min-length %))))
 
-;; A password config defines how our password generator behaves
-
-(def pwd-default
+;; A password config defines how our password generator behaves,
+;; here's an example
+(def pwd-conf-example
   {::min-length      10
-   ::max-length      20
+   ::max-length      15
    ::valid-char-classes
    [
     {::class ::uppercase ::min 2 ::valid char-uppers}
@@ -117,46 +84,62 @@
     {::class ::digits    ::min 2 ::valid char-digits}]
    })
 
-;; Now, we can create a password generator using a password config
+(defn valid-chars [{classes ::valid-char-classes}]
+  "List of valid characters"
+  (into #{} (apply concat (map ::valid classes))))
 
-(defn valid-chars
-  [& [pwd-conf]]
-  (let [new-map (merge pwd-default pwd-conf)]
-    valid (filter (not (nil? %))
-                  [(if (> (::min-lowercase new-map) 0) 
-                     valid-lowercase)
-                   (if (> (::min-uppercase new-map) 0)
-                     valid-uppercase)
-                   (if (> (::min-digits new-map) 0)
-                     valid-digits)
-                   (if (> (::min-symbols new-map) 0)
-                     (::valid-symbolsbols new-map) 
-                     valid-symbols)])))
+(defn valid-chars-spec [pwd-conf]
+  (fn [s] 
+    (reduce #(and %1 %2) true (map (valid-chars pwd-conf) (into [] s)))))
 
-(defn gen1 [& [pwd-conf]]
-  (let [new-map (merge pwd-default pwd-conf)
-        {min-lowercase   ::min-lowercase
-         min-uppercase   ::min-uppercase
-         min-digits      ::min-digits
-         min-symbols     ::min-symbols
-         valid-lowercase ::valid-lowercase
-         valid-uppercase ::valid-uppercase
-         valid-symbols   ::valid-symbols
-         valid-digits    ::valid-digits
-         min-length      ::min-length
-         max-length      ::max-length} new-map
-        gens [(if (> min-lowercase 0) 
-                (gen/vector-distinct (gen/elements valid-lowercase) 
-                                     {:num-elements min-lowercase}))
-              (if (> min-uppercase 0)
-                (gen/vector-distinct (gen/elements valid-uppercase) 
-                                     {:num-elements min-uppercase}))
-              (if (> min-digits 0)
-                (gen/vector-distinct (gen/elements valid-digits) 
-                                     {:num-elements min-digits}))
-              (if (> min-symbols 0)
-                (gen/vector-distinct (gen/elements valid-symbols) 
-                                     {:num-elements min-symbols}))]
-        rules (apply gen-concat (filter #(not (nil? %)) gens))
-        ]))
+(defn valid-chars-gen
+  "Create a generator of valid characters"
+  [pwd-conf & args]
+  (apply gen/vector
+         (concat [(gen/one-of 
+                   [(gen/elements (valid-chars pwd-conf))])] args)))
 
+(defn create-size-spec
+  [pwd-conf]
+  (let [{min-len ::min-length
+         max-len ::max-length} pwd-conf]
+    (s/and #(>= (count %) min-len) 
+           #(<  (count %) max-len) 
+           (valid-chars-spec pwd-conf))))
+
+(defn gen-concat 
+  "Concatenate several generators using s/fmap"
+  [& gens]
+  (gen/fmap (fn [gens] (apply str (shuffle (apply concat gens))))
+            (apply gen/tuple gens)))
+
+(defn create-password-gen
+  "Create a password generator based on a pwd-conf. `class-gens` is a
+  collection of generators to satisfy class specs and `size-gen` is a
+  generator of extra chars in order to satisfy min-length/max-length"
+  [pwd-conf]
+  (let [{classes    ::valid-char-classes
+         min-length ::min-length
+         max-length ::max-length} pwd-conf 
+        class-gens (map create-class-gen classes)
+        len        (class-mins-total pwd-conf)
+        size-gen   (valid-chars-gen pwd-conf 
+                               (- min-length len) 
+                               (- max-length len))]
+    (apply gen-concat (conj class-gens size-gen))))
+
+(defn create-password-spec [pwd-conf]
+  (s/with-gen (and' (conj (mapv create-class-spec 
+                                (::valid-char-classes pwd-conf))
+                          (create-size-spec pwd-conf)))
+    #(create-password-gen pwd-conf)))
+
+;;(def create-password-spec (memoize create-password-spec))
+
+(defmulti create-password-fn map?)
+
+(defmethod create-password-fn true [pwd-conf] 
+ #(gen/generate (s/gen (create-password-spec pwd-conf))))
+
+(defmethod create-password-fn false [pwd-spec] 
+ #(gen/generate (s/gen pwd-spec)))

@@ -1,4 +1,3 @@
-
 module.exports = {
 
   /**
@@ -338,5 +337,6 @@ module.exports = {
     return this.bruteNthPerm("0123456789", 999999);
 
     // TODO: non brute force method
-  }
+  },
+  
 };
