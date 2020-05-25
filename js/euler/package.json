@@ -1,0 +1,27 @@
+{
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
+  "name": "@up/euler",
+  "version": "1.0.0",
+  "description": "Dave's Javascript Project Euler",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register --recursive",
+    "test:watch": "npm run test -- --watch"
+  },
+  "author": "upgradingdave",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.20.0",
+    "babel-preset-es2015": "^6.18.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}

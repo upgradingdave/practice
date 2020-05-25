@@ -2,8 +2,9 @@
 
 This is the place where I practice solving programming exercises.
 
-Currently, I'm working thru the problems at
-[Project Euler](https://projecteuler.net).
+I started this to work thru [Project
+Euler](https://projecteuler.net). Since then, I've added all sorts of
+half baked code snippets
 
 # Clojure
 

@@ -1,4 +1,6 @@
 /js/node_modules
+/js/.tern-project
+/js/euler/node_modules/
 /cljs/upgradingdave/resources/public/js/compiled/devcards_out
 /cljs/upgradingdave/target
 /cljs/upgradingdave/figwheel_server.log
