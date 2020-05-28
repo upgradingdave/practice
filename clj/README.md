@@ -1,3 +1,12 @@
+# Clojure practice
+
+As of May 2020, dusting this project off to use it for practice and
+experiments.
+
+Use `./scripts/repl.sh` to start a repl
+
+# Old (I think there's a password generator in here somewhere?)
+
 * Password Generator Release Notes
 
 ** 2016-08-02, upgradingdave.password 0.2.0
