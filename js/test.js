@@ -1,5 +1,6 @@
 var assert = require('assert');
 var euler = require('./euler');
+const {Format} = require('./codewars');
 
 describe('euler problem 1', function() {
   it('should sum numbers divisible by 3 or 5', function () {
@@ -76,7 +77,7 @@ describe('reverse', function() {
     assert.equal("1023", euler.reverse("3201"));
     assert.equal("102", euler.reverse("201"));
     assert.equal("123456789012345678901234567890",
-      euler.reverse("098765432109876543210987654321"));
+		 euler.reverse("098765432109876543210987654321"));
   });
 });
 
@@ -104,4 +105,46 @@ describe('euler problem24', function() {
     assert.equal("210", euler.bruteNthPerm("012", 5));
     //assert.equal("2783915460", euler.problem24());
   });
+});
+
+describe('codewars field-chain-html', function() {
+  it("should wrap input in the correct element", function(){
+    assert.equal(Format.div("Foo"), `<div>Foo</div>`);
+  });
+  
+  it("should chain call together", function(){
+    assert.equal(Format.div.h1("Foo"), `<div><h1>Foo</h1></div>`);
+    assert.equal(Format.div.p.span("Foo"),
+		 `<div><p><span>Foo</span></p></div>`);
+  });
+
+  it("should chain 1 level deep", function(){
+    assert.equal(Format.div("Foo"),
+		 `<div>Foo</div>`);
+  });
+  
+  it("should chain 2 levels deep", function(){
+    assert.equal(Format.div.div("Foo"),
+		 `<div><div>Foo</div></div>`);
+  });
+
+  it("should chain 3 levels deep", function(){
+    assert.equal(Format.div.div.div("Foo"),
+		 `<div><div><div>Foo</div></div></div>`);
+  });
+
+  it("should chain 4 levels deep", function(){
+    assert.equal(Format.div.div.div("Foo"),
+		 `<div><div><div>Foo</div></div></div>`);
+  });
+
+  it("should allow multiple arguments", function(){
+    assert.equal(Format.div("Foo", "Bar"), `<div>FooBar</div>`);
+  });
+  
+  it("Should allow you to store and reuse methods", function(){
+    let wrapInDiv = Format.div;
+    assert.equal(wrapInDiv("Foo"), `<div>Foo</div>`);
+  });
+
 });
