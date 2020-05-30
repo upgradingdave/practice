@@ -1,0 +1,21 @@
+{
+  "name": "codewars",
+  "version": "1.0.0",
+  "description": "Dave's Javscript Practice",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha",
+    "test:watch": "./node_modules/.bin/mocha --watch ./test ./"
+  },
+  "keywords": [
+    "practice",
+    "js"
+  ],
+  "author": "upgradingdave",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.2.0"
+  },
+  "dependencies": {}
+}
