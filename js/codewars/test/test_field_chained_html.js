@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var assert = require('chai').assert;
 
-const {Format} = require("../field_chained_html.js");
+const {Format} = require("../src/field_chained_html.js");
 
 describe('Field Chained Html', function(done) {
   it('should output correct html', function() {

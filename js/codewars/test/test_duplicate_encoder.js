@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var assert = require('chai').assert;
 
-const {duplicateEncode} = require("../duplicate_encoder.js");
+const {duplicateEncode} = require("../src/duplicate_encoder.js");
 
 describe('Duplicate Encoder', function(done) {
   it('should decode correctly', function() {

@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var assert = require('chai').assert;
 
-const {isPrime} = require("../is_prime.js");
+const {isPrime} = require("../src/is_prime.js");
 
 describe('Is Prime?', function(done) {
   it('Basic tests', function() {
