@@ -15,21 +15,21 @@
         (recur (first xs) (rest xs) x 1 (conj result (factor->str cnt prev))))
       (apply str (conj result (factor->str cnt prev))))))
 
-(defn prime? [c primes]
-  (loop [p (first primes) primes (rest primes)]
-    (if p
-      (if (= (mod c p) 0)
-        false
-        (recur (first primes) (rest primes)))
-      true)))
-
 (defn factor [n]
-  (loop [c (dec n)]
-    (if (< (* c c) n)
-      [n 1]
-      (if (= (mod n c) 0)
-        [c (/ n c)]
-        (recur (dec c))))))
+  (cond
+    (= (mod n 2) 0)
+    [2 (/ n 2)]
+
+    (= (mod n 3) 0)
+    [3 (/ n 3)]
+
+    :else
+    (loop [try 5 i 2]
+      (if (> (* try try) n)
+        [n 1]
+        (if (= (mod n try) 0)
+          [try (/ n try)]
+          (recur (+ try i) (- 6 i)))))))
 
 (defn factorize [n]
   (let [[f1 f2] (factor n)]
@@ -38,21 +38,10 @@
       [(factorize f1)
        (factorize f2)])))
 
-(defn next-prime [primes]
-  (if (empty? primes) 2
-      (loop [c (inc (last primes))]
-        (if c
-          (if (prime? c primes)
-            c
-            (recur (inc c)))))))
-
 (defn prime-factors [n]
-  (loop [p 2 ps [] n n factors []]
-    (if (> n 1)
-      (if (= (mod n p) 0)
-        (recur p ps (/ n p) (conj factors p))
-        (recur (next-prime (conj ps p)) (conj ps p) n factors))
-      (factors->str factors))))
+  (let [factors (factorize n)
+        factors-tree (tree-seq vector? identity factors)]
+    (factors->str (sort (filter (complement (partial vector?)) factors-tree)))))
 
 (comment
   (clojure.test/run-tests 'codewars.prime-decomp.test)
