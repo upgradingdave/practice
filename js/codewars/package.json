@@ -4,8 +4,8 @@
   "description": "Dave's Javscript Practice",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha",
-    "test:watch": "./node_modules/.bin/mocha --watch ./test ./"
+    "test": "mocha",
+    "test:watch": "mocha --watch ./test ./"
   },
   "keywords": [
     "practice",
@@ -17,5 +17,8 @@
     "chai": "^4.2.0",
     "mocha": "^7.2.0"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "directories": {
+    "test": "test"
+  }
 }
