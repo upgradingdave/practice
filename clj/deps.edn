@@ -1,5 +1,6 @@
-{:paths ["src/clj"]
- :deps {}
+{:paths ["src/clj" "resources"]
+ :deps {;; selmer is used to generate project templates
+        selmer {:mvn/version "1.12.28"}}
  :aliases {:repl
            {:extra-deps
             {cider/cider-nrepl {:mvn/version "0.22.1"}

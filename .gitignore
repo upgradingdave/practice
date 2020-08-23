@@ -12,11 +12,14 @@
 /cljs/upgradingdave/.lein-repl-history
 /cljs/upgradingdave/.nrepl-port
 /cljs/upgradingdave/resources/public/js/core.cljs.cache.aot.json
-/clj/.nrepl-port
+
 /cljs/upgradingdave/resources/public/js/compiled/
 
+/clj/.nrepl-port
 /clj/.nrepl-history
 /clj/.cpcache
+/clj/.idea
+/clj/clj.iml
 
 /hs/.cabal-sandbox/
 /.cabal-sandbox
