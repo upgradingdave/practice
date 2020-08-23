@@ -1,9 +1,12 @@
 /**
- * @param {number[]} x
+ * @param {number[]} arr
  * @return {number[]}
  */
-let <{fn-name}> = function(x) {
-    return x;
+let <{fn-name}> = function(arr) {
+    if(arr === undefined || arr === null || arr.length <= 0) {
+        return arr;
+    }
+    return arr;
 };
 
 module.exports = {

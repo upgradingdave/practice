@@ -13,7 +13,7 @@
   (str file-path "/src/" file-name ".js"))
 
 (defn js-test-file-path [file-path file-name]
-  (str file-path "/test/test_" file-name".js"))
+  (str file-path "/test/test_" file-name ".js"))
 
 (defn gen-js-challenge!
   "Quickly generate files for a new javascript challenge and return command to run tests"
@@ -28,7 +28,7 @@
         main (selm/render-file "JSChallenge/main.js" context opts)
         test (selm/render-file "JSChallenge/test.js" context opts)
 
-        cmd (str file-path "/node_modules/.bin/mocha --grep \""
+        cmd (str "./node_modules/.bin/mocha --grep \""
                  challenge-name
                  "\"  --watch ./test ./")
         ]
@@ -37,3 +37,17 @@
 
     cmd
     ))
+
+(defn gen-js-challenge-cli! [challenge-name]
+  (let [file-path "../js/codewars"
+        challenge-name (if challenge-name
+                         challenge-name
+                         (do (println "Enter Challenge Name:")
+                             (read-line)))
+        cmd (gen-js-challenge! file-path challenge-name)]
+    (println (str "`" challenge-name "` created successfully"))
+    (println (str "  cd " file-path))
+    (println (str "  " cmd))))
+
+(defn -main [& [challenge-name]]
+  (gen-js-challenge-cli! challenge-name))
