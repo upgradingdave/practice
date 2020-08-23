@@ -20,6 +20,7 @@
 /clj/.cpcache
 /clj/.idea
 /clj/clj.iml
+/clj/target
 
 /hs/.cabal-sandbox/
 /.cabal-sandbox

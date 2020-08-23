@@ -1,4 +1,4 @@
-(ns upgrade.project
+(ns upgrade.project.core
   (:require [selmer.parser :as selm]
             [clojure.string :as str]))
 
@@ -9,8 +9,14 @@
         result (str (.toLowerCase first) (apply str (map str/capitalize rest)))]
     result))
 
+(defn js-main-file-path [file-path file-name]
+  (str file-path "/src/" file-name ".js"))
+
+(defn js-test-file-path [file-path file-name]
+  (str file-path "/test/test_" file-name".js"))
+
 (defn gen-js-challenge!
-  "Quickly generate files for a new javascript challenge"
+  "Quickly generate files for a new javascript challenge and return command to run tests"
   [file-path challenge-name]
   (let [
         fn-name (to-camel-case challenge-name)
@@ -22,20 +28,12 @@
         main (selm/render-file "JSChallenge/main.js" context opts)
         test (selm/render-file "JSChallenge/test.js" context opts)
 
-        cmd (str "./node_modules/.bin/mocha --grep \"" challenge-name
+        cmd (str file-path "/node_modules/.bin/mocha --grep \""
+                 challenge-name
                  "\"  --watch ./test ./")
-       ]
-    (spit (str file-path "/src/" (:file-name context) ".js") main)
-    (spit (str file-path "/test/test_" (:file-name context) ".js") test)
+        ]
+    (spit (js-main-file-path file-path file-name) main)
+    (spit (js-test-file-path file-path file-name) test)
 
-    (println cmd)
-
- ))
-
-(comment
-  (gen-js-challenge! "../js/codewars" "My Challenge")
-  (to-camel-case "My Function")
-  )
-
-
-
+    cmd
+    ))
