@@ -28,5 +28,6 @@
 /hs/cabal.sandbox.config
 /cabal.sandbox.config
 /hs/codewars/.idea
-/hs/codewars
+/hs/codewars/.stack-work
+/hs/codewars/codewars.iml
 /hs/old/.stack-work
