@@ -27,6 +27,7 @@ library
   exposed-modules:
       Experiment
       Lib
+      MultiplesOf3And5
       ParseInt
   other-modules:
       Paths_codewars
