@@ -29,6 +29,7 @@ library
       Lib
       MultiplesOf3And5
       ParseInt
+      RomanNumeralsEncoder
   other-modules:
       Paths_codewars
   hs-source-dirs:
@@ -53,6 +54,9 @@ test-suite codewars-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      MultiplesOf3And5Spec
+      ParseIntSpec
+      RomanNumeralsEncoderSpec
       Paths_codewars
   hs-source-dirs:
       test
