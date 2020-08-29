@@ -30,6 +30,7 @@ library
       MultiplesOf3And5
       ParseInt
       RomanNumeralsEncoder
+      Rot13
   other-modules:
       Paths_codewars
   hs-source-dirs:
@@ -57,6 +58,7 @@ test-suite codewars-test
       MultiplesOf3And5Spec
       ParseIntSpec
       RomanNumeralsEncoderSpec
+      Rot13Spec
       Paths_codewars
   hs-source-dirs:
       test
