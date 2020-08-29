@@ -47,3 +47,4 @@ tests:
     dependencies:
     - codewars
     - hspec
+    - QuickCheck
