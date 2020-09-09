@@ -5,8 +5,8 @@ const {<{fn-name}>} = require("../src/<{file-name}>.js");
 
 describe("<{challenge-name}>", function(done) {
 
-  it('returns an array of numbers', function() {
-    expect(<{fn-name}>([1,2,3])).to.deep.equal([1,2,3]);
-  });
+    it('satisfies examples', function() {
+        expect(<{fn-name}>([1,2,3])).to.deep.equal([1,2,3]);
+    });
 
 });
