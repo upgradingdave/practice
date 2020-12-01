@@ -6,7 +6,7 @@ const {maxProfit} = require("../src/maxProfit.js");
 describe("Max Profit", function(done) {
 
     it('example 1', function() {
-        expect(maxProfit([7,1,5,3,6,4])).to.equal(7);
+        expect(maxProfit([7,1,5,3,6,4])).to.equal(5);
     });
 
     it('example 2', function() {

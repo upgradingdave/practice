@@ -31,3 +31,5 @@
 /hs/codewars/.stack-work
 /hs/codewars/codewars.iml
 /hs/old/.stack-work
+
+.DS_Store
